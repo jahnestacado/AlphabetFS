@@ -1,4 +1,5 @@
-var fs = require('fs')// file system module
+var fs = require('fs')
+        , alphabetDirectories = require('./alphabetDirectories')
 
 
 function getDirContent(targetDirPath) {
@@ -14,15 +15,17 @@ function getDirContent(targetDirPath) {
 
     var ContentPathsContainer = {
         filePaths: filePaths,
-        dirPaths: dirPaths
-    }
-
+        dirPaths: dirPaths,
+        allPaths: filePaths.concat(dirPaths) 
+        }
+   
     return ContentPathsContainer;
 }
 
 
 function dirOrFileFilter(path, dirPaths, filePaths) {
-    if (fs.lstatSync(path).isDirectory()) {
+    var name = path.split('/').pop();
+    if (fs.lstatSync(path).isDirectory() && !alphabetDirectories.isAlphabetLetter(name)) {
         dirPaths.push(path);
     }
     else if (fs.lstatSync(path).isFile()) {

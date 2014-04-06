@@ -1,7 +1,8 @@
 var http = require('http') // http module
         , fs = require('fs')// file system module
         , pathGatherer = require('./pathGatherer.js')
-        , initDirStructure = require('./alphabetDirectories')
+        , mover = require('./mover.js')
+        , alphabetDirectories = require('./alphabetDirectories')
         , qs = require('qs'); // querystring parser
 
 // store the contents of 'index.html' to a buffer
@@ -20,12 +21,14 @@ http.createServer(function(request, response) {
         request.on('data', function(chunk) {
             console.log("Received body data:");
             var postObject = qs.parse(chunk.toString());
-            targetDirPath = postObject.text;
+           // targetDirPath = postObject.text;
+            targetDirPath = '/home/jahn/Desktop/temp';
  
             var Content = pathGatherer.getDirContent(targetDirPath);           
-            console.log(Content.filePaths);
             
-            initDirStructure.createAlphabetDirs(targetDirPath);
+            
+            alphabetDirectories.createAlphabetDirs(targetDirPath, Content, mover.moveToAlphabetDirs );
+          //  mover.moveToAlphabetDirs(targetDirPath, Content);
           
         });
 
