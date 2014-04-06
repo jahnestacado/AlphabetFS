@@ -13,8 +13,8 @@ function getDirContent(targetDirPath) {
     });
 
     var ContentPathsContainer = {
-        filePaths: filePaths.sort(),
-        dirPaths: dirPaths.sort()
+        filePaths: filePaths,
+        dirPaths: dirPaths
     }
 
     return ContentPathsContainer;

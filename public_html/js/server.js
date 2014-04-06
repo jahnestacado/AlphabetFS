@@ -1,6 +1,7 @@
 var http = require('http') // http module
         , fs = require('fs')// file system module
         , pathGatherer = require('./pathGatherer.js')
+        , initDirStructure = require('./alphabetDirectories')
         , qs = require('qs'); // querystring parser
 
 // store the contents of 'index.html' to a buffer
@@ -23,6 +24,8 @@ http.createServer(function(request, response) {
  
             var Content = pathGatherer.getDirContent(targetDirPath);           
             console.log(Content.filePaths);
+            
+            initDirStructure.createAlphabetDirs(targetDirPath);
           
         });
 
