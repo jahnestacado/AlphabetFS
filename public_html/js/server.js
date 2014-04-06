@@ -1,6 +1,6 @@
 var http = require('http') // http module
         , fs = require('fs')// file system module
-        , url = require('url')
+        , pathGatherer = require('./pathGatherer.js')
         , qs = require('qs'); // querystring parser
 
 // store the contents of 'index.html' to a buffer
@@ -15,11 +15,15 @@ http.createServer(function(request, response) {
         // pipe the request data to the console
         //  request.pipe(process.stdout);
 
-       
+
         request.on('data', function(chunk) {
             console.log("Received body data:");
             var postObject = qs.parse(chunk.toString());
-            console.log(postObject.text);
+            targetDirPath = postObject.text;
+ 
+            var Content = pathGatherer.getDirContent(targetDirPath);           
+            console.log(Content.filePaths);
+          
         });
 
 
@@ -41,6 +45,3 @@ http.createServer(function(request, response) {
 }).listen(8085);
 
 
-function printer(text) {
-    console.log(text);
-}
