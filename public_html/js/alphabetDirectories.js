@@ -29,7 +29,6 @@ function createAlphabetDirs(targetDir, Content, callback) {
 
 function isAlphabetLetter(name) {
     if (alphabetString.split("").indexOf(name) === -1) {
-        console.log("Den einai");
         return false;
     }
     return true;
