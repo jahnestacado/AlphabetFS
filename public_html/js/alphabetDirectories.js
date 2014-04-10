@@ -1,34 +1,34 @@
 var fs = require('fs'),
-        pathChecker = require('path'),
         mkdirp = require('mkdirp');
 
 
-var alphabetString = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+var alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
 
 function createAlphabetDirs(targetDir, Content, callback) {
-    var alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
-    alphabet.map(function(letter) {
-        var path = targetDir + '/' + letter;
-        fs.exists(path, function(exists) {
-            if (!exists) {
-                mkdirp(path, function(error) {
-                    if (error) {
-                        console.log("Error occured: " + error);
-                        return false;
-                    }
-                    console.log("Folder Created " + path);
-                    return true;
-                });
-            }
-        });
-        
-    }, callback(targetDir, Content));
   
- 
+    function createLetterDir(letter) {
+        if (letter) {
+            var letterPath = targetDir + '/' + letter;
+            fs.exists(letterPath, function(exists) {
+                if (!exists) {
+                    mkdirp(letterPath, function(error) {
+                        if (error) {
+                            console.log("Error occured: " + error);
+                        }
+                        console.log("Folder Created " + letterPath);
+                        createLetterDir(alphabet.shift());
+                    });
+                } else
+                    createLetterDir(alphabet.shift());
+            });
+        } else
+            callback(targetDir, Content);
+    }
+    createLetterDir(alphabet.shift());
 }
 
 function isAlphabetLetter(name) {
-    if (alphabetString.split("").indexOf(name) === -1) {
+    if (alphabet.indexOf(name) === -1) {
         return false;
     }
     return true;

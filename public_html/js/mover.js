@@ -13,14 +13,19 @@ function moveToLetterDir(targetDir, name) {
     if (isNaN(name.charAt(0))) {
         var originPath = targetDir + '/' + name;
         var destDir = targetDir + '/' + name.charAt(0).toUpperCase() + '/' + name;
-        if (fs.lstatSync(originPath).isDirectory()) {
-            fs.copySync(originPath, destDir, function(err) {
-                if (err)
-                    return console.error(err);
+        var isDirectory = fs.lstatSync(originPath).isDirectory();
+        if (isDirectory) {
 
-            });
-            rmdir(originPath, function(error) {
-                console.log(error);
+            fs.copy(originPath, destDir, function(err) {
+                if (err) {
+                    return console.error(err);
+                } else {
+                    rmdir(originPath, function(err) {
+                        if (err) 
+                            return console.error(err);                        
+                        console.log("Removing dir " + originPath);
+                    });
+                }
             });
         } else
             fs.renameSync(originPath, destDir);
