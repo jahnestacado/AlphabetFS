@@ -15,11 +15,11 @@ app.configure(function() {
     app.use(express.json());       // to support JSON-encoded bodies
     app.use(express.urlencoded()); // to support URL-encoded bodies
     app.set('port', process.env.PORT || 8085);
-    //  app.use(express.static(path.join("/home/jahn/NetBeansProjects/AlbumNode", "/public_html/css/styling.css")));
+    app.use(express.static("/home/jahn/NetBeansProjects/AlbumNode/public_html/css"));
 });
 
 app.post('/', function(request, response) {
-    console.log(process.env.HOME);
+    console.log(__dirname);
     targetDirPath = request.body.text;
 
     var Content = pathGatherer.getDirContent(targetDirPath);
