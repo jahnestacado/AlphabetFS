@@ -1,11 +1,15 @@
 var fs = require('fs'),
+        mover = require('./mover.js'),
         mkdirp = require('mkdirp');
 
+function getAlphabet() {
+    var alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
+    return alphabet;
+}
 
-var alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
-
-function createAlphabetDirs(targetDir, Content, callback) {
-  
+function createAlphabetDirs(targetDir, Content) {
+    var alphabetTmp = getAlphabet();
+    console.log("ALphabet size ", alphabetTmp.length)
     function createLetterDir(letter) {
         if (letter) {
             var letterPath = targetDir + '/' + letter;
@@ -16,19 +20,19 @@ function createAlphabetDirs(targetDir, Content, callback) {
                             console.log("Error occured: " + error);
                         }
                         console.log("Folder Created " + letterPath);
-                        createLetterDir(alphabet.shift());
+                        createLetterDir(alphabetTmp.shift());
                     });
                 } else
-                    createLetterDir(alphabet.shift());
+                    createLetterDir(alphabetTmp.shift());
             });
         } else
-            callback(targetDir, Content);
+            mover.moveToAlphabetDirs(targetDir, Content);
     }
-    createLetterDir(alphabet.shift());
+    createLetterDir(alphabetTmp.shift());
 }
 
 function isAlphabetLetter(name) {
-    if (alphabet.indexOf(name) === -1) {
+    if (getAlphabet().indexOf(name) === -1) {
         return false;
     }
     return true;

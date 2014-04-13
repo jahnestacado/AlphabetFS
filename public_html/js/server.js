@@ -5,6 +5,7 @@ var http = require('http') // http module
         , alphabetDirectories = require('./alphabetDirectories')
         , fsWatcher = require('fs.notify')
         , express = require('express')
+        , wait = require('wait.for')
         , qs = require('qs'); // querystring parser
 var app = express();
 
@@ -23,14 +24,10 @@ app.post('/', function(request, response) {
     targetDirPath = request.body.text;
 
     var Content = pathGatherer.getDirContent(targetDirPath);
-    alphabetDirectories.createAlphabetDirs(targetDirPath, Content, mover.moveToAlphabetDirs);
+    alphabetDirectories.createAlphabetDirs(targetDirPath, Content);
 
 
-//         var notifications = new fsWatcher([targetDirPath]);
-//        notifications.on('change', function(file, event, path) {
-//        console.log('New file ' + file + ' caught a ' + event + ' event on ' + path);
-//        mover.moveToLetterDir(targetDirPath, file)
-//        }); 
+
 
     response.writeHead(200, "OK", {'Content-Type': 'text/html'});
     response.end(html);
