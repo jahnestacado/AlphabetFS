@@ -7,9 +7,7 @@ var numOfPaths = 0;
 
 function startTrackingCheck(targetDirPath) {
     counter++;
-    console.log("Counter ", counter);
-    console.log("NumofPaths" ,numOfPaths);
-    if (counter === numOfPaths && numOfPaths !== 0) {
+    if (counter === numOfPaths || numOfPaths === 0) {
         track.registerDirectory(targetDirPath);
         counter = 0;
         numOfPaths = 0;
@@ -20,10 +18,15 @@ function startTrackingCheck(targetDirPath) {
 function moveToAlphabetDirs(targetDir, Content) {
     var allPaths = Content.allPaths;
     numOfPaths = allPaths.length;
-    allPaths.map(function(path) {
-        var name = path.split('/').pop();
-        moveToLetterDir(targetDir, name);
-    });
+    if (numOfPaths === 0) {
+        startTrackingCheck(targetDir);
+    }
+    else {
+        allPaths.map(function(path) {
+            var name = path.split('/').pop();
+            moveToLetterDir(targetDir, name);
+        });
+    }
 }
 
 
@@ -33,16 +36,14 @@ function moveToLetterDir(targetDir, name) {
         var destDir = targetDir + '/' + name.charAt(0).toUpperCase() + '/' + name;
         var isDirectory = fs.lstatSync(originPath).isDirectory();
         if (isDirectory) {
-            //Bug here. It transfers the dir first without content and then deletes it so it doesnt exist to continiou the transfers of the content
-            console.log(destDir);
             fs.copy(originPath, destDir, function(error) {
                 if (error)
-                   return ;
+                    return;
 
 
                 rmdir(originPath, function(error) {
                     if (error)
-                       return;
+                        return;
                     startTrackingCheck(targetDir);
                 });
 
@@ -53,8 +54,6 @@ function moveToLetterDir(targetDir, name) {
                 if (error)
                     return;
                 startTrackingCheck(targetDir);
-
-
             });
         }
     }
