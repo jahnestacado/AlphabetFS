@@ -3,7 +3,6 @@ var http = require('http') // http module
         , pathGatherer = require('./pathGatherer.js')
         , mover = require('./mover.js')
         , alphabetDirectories = require('./alphabetDirectories')
-        , fsWatcher = require('fs.notify')
         , express = require('express')
         , wait = require('wait.for')
         , qs = require('qs'); // querystring parser
@@ -25,10 +24,6 @@ app.post('/', function(request, response) {
 
     var Content = pathGatherer.getDirContent(targetDirPath);
     alphabetDirectories.createAlphabetDirs(targetDirPath, Content);
-
-
-
-
     response.writeHead(200, "OK", {'Content-Type': 'text/html'});
     response.end(html);
 });
