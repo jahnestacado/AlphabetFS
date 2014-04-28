@@ -42,11 +42,10 @@ function moveFileWhenComplete(targetDir, fileName) {
     var oldSize = 0;
 
     function listenUntilIsDone() {
-        if (getSize(path) === 4096) {
-            var content = fs.readdirSync(path);
-            var size = content.reduce(function(total, file) {
-                return total + getSize(targetDir + '/' + fileName + '/' + file);
-            }, 0);
+
+        if (isADirectory(path)) {
+           // var content = fs.readdirSync(path);
+            var size = getSizeSnapshot(path);
             console.log("Sizeee ", size);
 
             if (size !== 0 && oldSize === size) {
@@ -60,18 +59,35 @@ function moveFileWhenComplete(targetDir, fileName) {
         else
             mover.moveToLetterDir(targetDir, fileName);
     }
-    
+
     listenUntilIsDone();
 
 }
 
 
-function getSize(filename) {
+function getSingleFileSize(filename) {
     var exists = fs.existsSync(filename);
     if (exists) {
         return fs.statSync(filename).size;
     }
     return 0;
+}
+
+function isADirectory(path) {
+    return getSingleFileSize(path) === 4096;
+}
+
+
+function getSizeSnapshot(path) {
+    if (isADirectory(path)) {
+        var content = fs.readdirSync(path);
+        var size = content.reduce(function(total, file) {
+            return total + getSizeSnapshot(path + '/' + file);
+        }, 0)
+        return size;
+    }
+    else
+        return getSingleFileSize(path);
 }
 
 
