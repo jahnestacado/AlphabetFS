@@ -4,7 +4,6 @@ var fs = require('fs')
         , mover = require('./mover.js');
 
 var registeredDirs = [];
-var processedFiles = [];
 
 function registerDirectory(targetDirPath) {
     if (registeredDirs.indexOf(targetDirPath) === -1) {
@@ -13,6 +12,7 @@ function registerDirectory(targetDirPath) {
         var watcher = hound.watch(targetDirPath);
 
         watcher.on('create', function(file, stats) {
+            //Only move the parent dir
             if (file.split("/").length - 1 === targetDirPath.split("/").length) {
                 snitch.onTransferFinished(file, function() {
                     mover.moveToLetterDir(targetDirPath, file.replace(targetDirPath + "/", "").trim());
