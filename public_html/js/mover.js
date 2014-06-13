@@ -1,16 +1,15 @@
 var fs = require('fs-extra'),
-        //   track = require('./dirTracker.js'),
-        rmdir = require('rimraf');
+         track = require('./dirTracker.js'),
+         rmdir = require('rimraf');
 
 var counter = 0;
 var numOfPaths = 0;
 
 function startTrackingCheck(targetDirPath) {
     counter++;
-
+    console.log("Counterrrr ", counter);
+    console.log("NumOfPaths ", numOfPaths);
     if (counter === numOfPaths || numOfPaths === 0) {
-
-        var track = require('./dirTracker.js');
         track.registerDirectory(targetDirPath);
         counter = 0;
         numOfPaths = 0;
@@ -39,8 +38,6 @@ function moveToLetterDir(targetDir, name, callback) {
         var destDir = targetDir + '/' + name.charAt(0).toUpperCase() + '/' + name;
         var isDirectory = fs.lstatSync(originPath).isDirectory();
         if (isDirectory) {
-            console.log("The origin Path", originPath);
-            console.log("the dest path ", destDir);
             fs.copy(originPath, destDir, function(error) {
                 if (error)
                     return;
@@ -50,23 +47,18 @@ function moveToLetterDir(targetDir, name, callback) {
                         return;
                     }
                     if (callback) {
-                        console.log("call the callback");
                         startTrackingCheck(targetDir);
                     }
                 });
 
             });
-
         } else {
             fs.rename(originPath, destDir, function(error) {
-                console.log("The origin Path", originPath);
-                console.log("the dest path ", destDir);
                 if (error) {
                     console.log("error");
                     return;
                 }
                 if (callback) {
-                    console.log("call the callback");
                     startTrackingCheck(targetDir);
                 }
             });
