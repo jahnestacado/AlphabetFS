@@ -1,32 +1,19 @@
 var fs = require('fs-extra'),
-         track = require('./dirTracker.js'),
-         rmdir = require('rimraf');
+        tracker = require('./dirTracker.js'),
+        rmdir = require('rimraf');
 
-var counter = 0;
-var numOfPaths = 0;
-
-function startTrackingCheck(targetDirPath) {
-    counter++;
-    console.log("Counterrrr ", counter);
-    console.log("NumOfPaths ", numOfPaths);
-    if (counter === numOfPaths || numOfPaths === 0) {
-        track.registerDirectory(targetDirPath);
-        counter = 0;
-        numOfPaths = 0;
-    }
-}
-
+var checker = tracker.checker;
 
 function moveToAlphabetDirs(targetDir, Content) {
     var allPaths = Content.allPaths;
-    numOfPaths = allPaths.length;
-    if (numOfPaths === 0) {
-        startTrackingCheck(targetDir);
+    checker.numOfPaths = allPaths.length;
+    if (checker.numOfPaths === 0) {
+        checker.trackingCheck(targetDir);
     }
     else {
         allPaths.map(function(path) {
             var name = path.split('/').pop();
-            moveToLetterDir(targetDir, name, startTrackingCheck);
+            moveToLetterDir(targetDir, name, checker.trackingCheck);
         });
     }
 }
@@ -47,7 +34,7 @@ function moveToLetterDir(targetDir, name, callback) {
                         return;
                     }
                     if (callback) {
-                        startTrackingCheck(targetDir);
+                        checker.trackingCheck(targetDir);
                     }
                 });
 
@@ -59,18 +46,13 @@ function moveToLetterDir(targetDir, name, callback) {
                     return;
                 }
                 if (callback) {
-                    startTrackingCheck(targetDir);
+                    checker.trackingCheck(targetDir);
                 }
             });
         }
     }
 
 }
-
-
-
-
-
 
 exports.moveToAlphabetDirs = moveToAlphabetDirs;
 exports.moveToLetterDir = moveToLetterDir;

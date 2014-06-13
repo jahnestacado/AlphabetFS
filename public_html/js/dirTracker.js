@@ -27,7 +27,21 @@ function registerDirectory(targetDirPath) {
 
 }
 
+var checker = {
+    counter: 0,
+    numOfPaths: 0,
+    trackingCheck: function(targetDirPath) {
+        this.counter++;
+        if (this.counter === this.numOfPaths || this.numOfPaths === 0) {
+            registerDirectory(targetDirPath);
+            this.counter = 0;
+            this.numOfPaths = 0;
+        }
+    }
+}
+
 exports.registerDirectory = registerDirectory;
+exports.checker = checker;
 
 
 
