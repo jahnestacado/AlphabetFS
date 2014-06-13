@@ -1,13 +1,11 @@
 var fs = require('fs')
         , alphabetDirectories = require('./alphabetDirectories')
 
-
 function getDirContent(targetDirPath) {
     var filePaths = [];
     var dirPaths = [];
     var contentNames = fs.readdirSync(targetDirPath);
-
-
+    
     contentNames.forEach(function(name) {
         var path = targetDirPath + '/' + name;
         dirOrFileFilter(path, dirPaths, filePaths);
@@ -32,7 +30,5 @@ function dirOrFileFilter(path, dirPaths, filePaths) {
         filePaths.push(path);
     }
 }
-
-
 
 exports.getDirContent = getDirContent;

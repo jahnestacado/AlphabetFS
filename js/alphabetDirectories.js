@@ -9,7 +9,6 @@ function getAlphabet() {
 
 function createAlphabetDirs(targetDir, Content) {
     var alphabetTmp = getAlphabet();
-    console.log("ALphabet size ", alphabetTmp.length)
     function createLetterDir(letter) {
         if (letter) {
             var letterPath = targetDir + '/' + letter;

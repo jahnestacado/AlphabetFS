@@ -4,7 +4,7 @@ var http = require('http') // http module
         , mover = require('./mover.js')
         , alphabetDirectories = require('./alphabetDirectories')
         , express = require('express')
-        , wait = require('wait.for')
+        , path = require('path')
         , qs = require('qs'); // querystring parser
 var app = express();
 
@@ -15,15 +15,13 @@ app.configure(function() {
     app.use(express.json());       // to support JSON-encoded bodies
     app.use(express.urlencoded()); // to support URL-encoded bodies
     app.set('port', process.env.PORT || 8085);
-    app.use(express.static("/home/jahn/NetBeansProjects/AlbumNode/public_html/css"));
+    app.use(express.static("/home/jahn/NetBeansProjects/AlbumNode/css"));
 });
 
 app.post('/', function(request, response) {
-    console.log(__dirname);
     targetDirPath = request.body.text;
-
-    var Content = pathGatherer.getDirContent(targetDirPath);
-    alphabetDirectories.createAlphabetDirs(targetDirPath, Content);
+    var content = pathGatherer.getDirContent(targetDirPath);
+    alphabetDirectories.createAlphabetDirs(targetDirPath, content);
     response.writeHead(200, "OK", {'Content-Type': 'text/html'});
     response.end(html);
 });
