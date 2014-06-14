@@ -1,11 +1,12 @@
 var fs = require('fs-extra'),
         tracker = require('./dirTracker.js'),
+        alphabetDirectories = require('./alphabetDirectories'),
         rmdir = require('rimraf');
 
 var checker = tracker.checker;
 
-function moveToAlphabetDirs(targetDir, Content) {
-    var allPaths = Content.allPaths;
+function moveToAlphabetDirs(targetDir, content) {
+    var allPaths = content.allPaths;
     checker.numOfPaths = allPaths.length;
     if (checker.numOfPaths === 0) {
         checker.trackingCheck(targetDir);
@@ -20,9 +21,8 @@ function moveToAlphabetDirs(targetDir, Content) {
 
 
 function moveToLetterDir(targetDir, name, callback) {
-    if (isNaN(name.charAt(0))) {
         var originPath = targetDir + '/' + name;
-        var destDir = targetDir + '/' + name.charAt(0).toUpperCase() + '/' + name;
+        var destDir = targetDir + '/' + findDestDir(name) + '/' + name;
         var isDirectory = fs.lstatSync(originPath).isDirectory();
         if (isDirectory) {
             fs.copy(originPath, destDir, function(error) {
@@ -50,8 +50,14 @@ function moveToLetterDir(targetDir, name, callback) {
                 }
             });
         }
-    }
+}
 
+function findDestDir(name){
+    var initialChar =  name.charAt(0).toUpperCase();
+    if(alphabetDirectories.isAlphabetLetter(initialChar)){
+        return initialChar;
+    }
+    return alphabetDirectories.nonAlphabetFolderName;
 }
 
 exports.moveToAlphabetDirs = moveToAlphabetDirs;
