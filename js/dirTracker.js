@@ -1,5 +1,5 @@
 var fs = require('fs')
-        , snitch = require('./snitch.js')
+        , snitch = require('snitch')
         , hound = require('hound')
         , mover = require('./mover.js');
 
