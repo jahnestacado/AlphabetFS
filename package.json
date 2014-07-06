@@ -1,0 +1,29 @@
+{
+  "name": "AlphabetFS",
+  "version": "0.0.1",
+  "description": "AlphabetFS ==========",
+  "main": "server.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+   "dependencies": {
+    "express": ">=3.1.0",
+    "socket.io": ">=1.0.6",
+    "hound": ">=1.0.4",
+    "rimraf": ">=2.2.8",
+    "snitch": ">=0.0.1"
+  },	
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jahnestacado/AlphabetFS"
+  },
+  "author": "Ioannis Tzanellis <ioannis.kiwe@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/jahnestacado/AlphabetFS/issues"
+  },
+  "homepage": "https://github.com/jahnestacado/AlphabetFS"
+}
