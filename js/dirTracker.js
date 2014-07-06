@@ -14,7 +14,7 @@ function registerDirectory(targetDirPath) {
         watcher.on('create', function(file, stats) {
             //Only move the parent dir
             if (file.split("/").length - 1 === targetDirPath.split("/").length) {
-                snitch.onTransferFinished(file, function() {
+                snitch.onStopGrowing(file, function() {
                     mover.moveToLetterDir(targetDirPath, file.replace(targetDirPath + "/", "").trim());
                 });
             }
