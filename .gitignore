@@ -1,5 +1,7 @@
 # NetBeans related files
 nbproject/
-README.md
+
+#Local module directory
+node_modules/
 
 
