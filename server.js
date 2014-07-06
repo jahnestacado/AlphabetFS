@@ -1,20 +1,20 @@
 var http = require('http') // http module
         , fs = require('fs')// file system module
-        , pathGatherer = require('./pathGatherer.js')
-        , mover = require('./mover.js')
-        , alphabetDirectories = require('./alphabetDirectories')
+        , pathGatherer = require('./core/pathGatherer.js')
+        , mover = require('./core/mover.js')
+        , alphabetDirectories = require('./core/alphabetDirectories')
         , express = require('express')
         , bodyParser = require('body-parser');
 
 var app = express();
 
 // store the contents of 'index.html' to a buffer
-var html = fs.readFileSync('./index.html');
+var html = fs.readFileSync(__dirname + '/public/index.html');
 
 app.use(bodyParser.json());       // to support JSON-encoded bodies
 app.use(bodyParser.urlencoded()); // to support URL-encoded bodies
 app.set('port', process.env.PORT || 8085);
-app.use(express.static("/home/jahn/NetBeansProjects/AlbumNode/css"));
+app.use(express.static(__dirname + '/public/css'));
 
 app.post('/', function(request, response) {
     targetDirPath = request.body.text;
