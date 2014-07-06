@@ -7,29 +7,24 @@
         <meta name="viewport" content="width=device-width">
         <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
         <link rel="stylesheet" href="/styling.css">
-        <script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
 
     </head>
     <body>
-        <form method="post" class='container' action="/">
+        <div  class='container' >
             <h1>AlphabetFS</h1>
-            Enter path to sort and track: <input type="text" class="form-control" name="text">
+            Enter path to sort and track: <input type="text"  class="form-control" name="input-path">
             <br />
-            <input type="submit"  id="submit" name="submit" value="SUBMIT" />
+            <button type="button" id="submit-path">SUBMIT</button>
+        </div>
 
-        </form>
-        
+        <!-- Third Party Dependencies -->
+        <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
 
-<!--        <script>
-            var selectDialogueLink = $('<a href="">Select files</a>');
-            var fileSelector = $('<input type="file" />');
+        <!-- Socket.io -->
+        <script src="/socket.io/socket.io.js"></script>
 
-            selectDialogueLink.click(function() {
-                fileSelector.click();
-                return false;
-            });
-            $('body').html(selectDialogueLink);
+        <!-- Our app.js file -->
+        <script type="text/javascript" src="/js/app.js"></script>
 
-        </script>-->
     </body>
 </html>
