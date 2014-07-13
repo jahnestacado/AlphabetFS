@@ -57,7 +57,7 @@ function findDestDir(name){
     if(alphabetDirectories.isAlphabetLetter(initialChar)){
         return initialChar;
     }
-    return alphabetDirectories.nonAlphabetFolderName;
+    return alphabetDirectories.otherFolder;
 }
 
 exports.moveToAlphabetDirs = moveToAlphabetDirs;

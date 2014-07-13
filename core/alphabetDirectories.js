@@ -2,7 +2,7 @@ var fs = require('fs'),
         mover = require('./mover.js'),
         mkdirp = require('mkdirp');
 
-var nonAlphabetFolderName = "#$%123";
+var otherFolder = "#$%123";
 
 function getAlphabet() {
     var alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
@@ -10,7 +10,7 @@ function getAlphabet() {
 }
 
 function createAlphabetDirs(targetDir, content) {
-    var alphabetFsStructure = getAlphabet().concat([nonAlphabetFolderName]); 
+    var alphabetFsStructure = getAlphabet().concat([otherFolder]); 
     function createLetterDir(letter) {
         if (letter) {
             var letterPath = targetDir + '/' + letter;
@@ -39,9 +39,17 @@ function isAlphabetLetter(name) {
     return true;
 }
 
+function isAlphabetFSDirectory(name){
+    if(isAlphabetLetter(name) || name === otherFolder ){
+        return true
+    }
+    return false;
+}
+
 exports.createAlphabetDirs = createAlphabetDirs;
 exports.isAlphabetLetter = isAlphabetLetter;
-exports.nonAlphabetFolderName = nonAlphabetFolderName;
+exports.otherFolder = otherFolder;
+exports.isAlphabetFSDirectory = isAlphabetFSDirectory;
 
 
  
