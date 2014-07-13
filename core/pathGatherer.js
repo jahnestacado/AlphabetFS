@@ -23,7 +23,7 @@ function getDirContent(targetDirPath) {
 
 function dirOrFileFilter(path, dirPaths, filePaths) {
     var name = path.split('/').pop();
-    if (fs.lstatSync(path).isDirectory() && !alphabetDirectories.isAlphabetLetter(name)) {
+    if (fs.lstatSync(path).isDirectory() && !alphabetDirectories.isAlphabetFSDirectory(name)) {
         dirPaths.push(path);
     }
     else if (fs.lstatSync(path).isFile()) {
