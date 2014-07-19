@@ -10,5 +10,5 @@ $('#submit-path').click(function(e) {
 
 
 socket.on("register-path", function(data) {
-    $(' #listeningPaths').append("<li class='list-group-item' >" + data + "</li>");
+    $('#registered-paths').append("<li class='list-group-item' >" + data + "</li>");
 });
