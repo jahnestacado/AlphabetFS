@@ -1,14 +1,15 @@
 var fs = require('fs')
         , snitch = require('snitch')
         , hound = require('hound')
-        , mover = require('./mover.js');
+        , mover = require('./mover.js')
+        , bus = require('hermes-bus');
 
 var registeredDirs = [];
 
 function registerDirectory(targetDirPath) {
     if (registeredDirs.indexOf(targetDirPath) === -1) {
         registeredDirs.push(targetDirPath);
-        console.log("before", registeredDirs);
+        bus.emit('socket-UIEvent', {event: "register-path", path: targetDirPath});
         var watcher = hound.watch(targetDirPath);
 
         watcher.on('create', function(file, stats) {
