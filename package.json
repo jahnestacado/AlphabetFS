@@ -14,7 +14,9 @@
     "socket.io": "1.0.6",
     "hound": "1.0.4",
     "rimraf": "2.2.8",
-    "snitch": "0.0.3"
+    "mkdirp": "1.4.14",
+    "snitch": "0.0.3",
+    "hermes-bus": "0.0.1"
   },	
   "repository": {
     "type": "git",
