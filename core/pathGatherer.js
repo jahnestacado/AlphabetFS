@@ -11,13 +11,13 @@ function getDirContent(targetDirPath) {
         dirOrFileFilter(path, dirPaths, filePaths);
     });
 
-    var ContentPathsContainer = {
+    var contentPathsContainer = {
         filePaths: filePaths,
         dirPaths: dirPaths,
         allPaths: filePaths.concat(dirPaths) 
         }
    
-    return ContentPathsContainer;
+    return contentPathsContainer;
 }
 
 

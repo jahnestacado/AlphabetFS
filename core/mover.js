@@ -21,26 +21,14 @@ function moveToAlphabetDirs(targetDir, content) {
 
 
 function moveToLetterDir(targetDir, name, callback) {
-        var originPath = targetDir + '/' + name;
-        var destDir = targetDir + '/' + findDestDir(name) + '/' + name;
-        var isDirectory = fs.lstatSync(originPath).isDirectory();
-        if (isDirectory) {
-            fs.copy(originPath, destDir, function(error) {
-                if (error)
-                    return;
-                rmdir(originPath, function(error) {
-                    if (error) {
-                        console.log("error");
-                        return;
-                    }
-                    if (callback) {
-                        checker.trackingCheck(targetDir);
-                    }
-                });
-
-            });
-        } else {
-            fs.rename(originPath, destDir, function(error) {
+    var originPath = targetDir + '/' + name;
+    var destDir = targetDir + '/' + findDestDir(name) + '/' + name;
+    var isDirectory = fs.lstatSync(originPath).isDirectory();
+    if (isDirectory) {
+        fs.copy(originPath, destDir, function(error) {
+            if (error)
+                return;
+            rmdir(originPath, function(error) {
                 if (error) {
                     console.log("error");
                     return;
@@ -49,12 +37,24 @@ function moveToLetterDir(targetDir, name, callback) {
                     checker.trackingCheck(targetDir);
                 }
             });
-        }
+
+        });
+    } else {
+        fs.rename(originPath, destDir, function(error) {
+            if (error) {
+                console.log("error");
+                return;
+            }
+            if (callback) {
+                checker.trackingCheck(targetDir);
+            }
+        });
+    }
 }
 
-function findDestDir(name){
-    var initialChar =  name.charAt(0).toUpperCase();
-    if(alphabetDirectories.isAlphabetLetter(initialChar)){
+function findDestDir(name) {
+    var initialChar = name.charAt(0).toUpperCase();
+    if (alphabetDirectories.isAlphabetLetter(initialChar)) {
         return initialChar;
     }
     return alphabetDirectories.otherFolder;
