@@ -8,7 +8,22 @@ $('#submit-path').click(function(e) {
 });
 
 
-
 socket.on("register-path", function(data) {
-    $('#registered-paths').append("<li class='list-group-item' >" + data + "</li>");
+    addRegisteredDirRow(data);
 });
+
+
+function addRegisteredDirRow(path) {
+    $('#registered-paths').append("<li class='list-group-item' >" + path + "</li>");
+}
+
+
+socket.on("init", function(data) {
+    $('#registered-paths').empty();
+    data.forEach(function(path) {
+        addRegisteredDirRow(path);
+    })
+});
+
+
+
