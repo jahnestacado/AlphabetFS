@@ -45,17 +45,14 @@ function init(socket) {
     db.exists("abc-fs", "registered-paths", function(err, data) {
         if (data) {
             db.get("abc-fs", "registered-paths", function(error, data) {
-                if (registeredDirs !== data) {
-                    registeredDirs = data;
-                    var newPaths = data.filter(function(i) {
-                        return registeredDirs.indexOf(i) < 0;
-                    });
-                    newPaths.forEach(function(path) {
+                if (registeredDirs.length === 0) {
+                    data.forEach(function(path) {
                         activateDir(path);
                         socket.emit("path-entry", path);
                     });
+                } else {
+                    socket.emit('init', data);
                 }
-                socket.emit('init', data);
             }
             );
         } else {
