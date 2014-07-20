@@ -16,7 +16,8 @@
     "rimraf": "2.2.8",
     "mkdirp": "1.4.14",
     "snitch": "0.0.3",
-    "hermes-bus": "0.0.1"
+    "hermes-bus": "0.0.1",
+    "riak-js": "1.4.14"
   },	
   "repository": {
     "type": "git",
