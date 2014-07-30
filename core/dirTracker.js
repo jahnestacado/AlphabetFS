@@ -3,7 +3,7 @@ var fs = require('fs')
         , hound = require('hound')
         , mover = require('./mover.js')
         , bus = require('hermes-bus')
-        , db = require('riak-js').getClient({host: "127.0.0.1", port: "8098"});
+        , db = require('../db/db-utils.js');
 
 
 function registerDirectory(targetDirPath) {
@@ -26,9 +26,11 @@ function registerDirectory(targetDirPath) {
 
 function storeAndUpdateUI(path) {
     db.get("abc-fs", "registered-paths", function(error, registeredPaths) {
-        registeredPaths.push(path);
-        db.save("abc-fs", "registered-paths", registeredPaths);
-        bus.emit('socket-ui-event', {event: "register-path", path: path});
+        if (registeredPaths.indexOf(path) === -1) {
+            registeredPaths.push(path);
+            db.save("abc-fs", "registered-paths", registeredPaths);
+            bus.emit('socket-ui-event', {event: "register-path", path: path});
+        }
     });
 }
 
