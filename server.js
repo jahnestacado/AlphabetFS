@@ -6,7 +6,7 @@ var pathGatherer = require('./core/pathGatherer.js')
         , server = require('http').createServer(app)
         , io = require('socket.io').listen(server)
         , bus = require('hermes-bus')
-        , db = require('riak-js').getClient({host: "127.0.0.1", port: "8098"});
+        , db = require('./db/db-utils.js');
 
 
 server.listen(8085);
@@ -42,7 +42,7 @@ function activateDir(targetDirPath) {
 
 
 function init(socket) {
-    db.exists("abc-fs", "registered-paths", function(err, data) {
+    db.exists("abc-fs", "registered-paths", function(error, data) {
         if (data) {
             db.get("abc-fs", "registered-paths", function(error, data) {
                 if (registeredDirs.length === 0) {
