@@ -14,3 +14,8 @@ body {
     margin-right:0;
     width:250px;
 }
+
+.close-btn{
+    background: transparent;
+    border: none !important;
+}

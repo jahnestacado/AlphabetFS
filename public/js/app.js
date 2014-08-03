@@ -14,8 +14,19 @@ socket.on("register-path", function(data) {
 
 
 function addRegisteredDirRow(path) {
-    $('#registered-paths').append("<li class='list-group-item' >" + path + "</li>");
+    var closeBtn = $('<button/>').addClass('pull-right close-btn').text(htmlDecode('&#10006;')).click(function() {
+        alert(path);
+    });
+
+    var listItem = $('<li/>').addClass('list-group-item').text(path);
+    
+    listItem.append(closeBtn);
+    $('#registered-paths').append(listItem);
 }
+
+function htmlDecode(value) {
+    return $('<div/>').html(value).text();
+};
 
 
 socket.on("init", function(data) {
