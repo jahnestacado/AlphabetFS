@@ -9,30 +9,34 @@ $('#submit-path').click(function(e) {
 
 
 socket.on("register-path", function(data) {
-    addRegisteredDirRow(data);
+    addPathRow(data);
 });
 
 
-function addRegisteredDirRow(path) {
+function addPathRow(path) {
+    var listItem = $('<li/>').addClass('list-group-item').text(path);
+
     var closeBtn = $('<button/>').addClass('pull-right close-btn').text(htmlDecode('&#10006;')).click(function() {
-        alert(path);
+        socket.emit('path-delete', path);
+        listItem.remove();
     });
 
     var listItem = $('<li/>').addClass('list-group-item').text(path);
-    
+
     listItem.append(closeBtn);
     $('#registered-paths').append(listItem);
 }
 
 function htmlDecode(value) {
     return $('<div/>').html(value).text();
-};
+}
+;
 
 
 socket.on("init", function(data) {
     $('#registered-paths').empty();
     data.forEach(function(path) {
-        addRegisteredDirRow(path);
+        addPathRow(path);
     })
 });
 

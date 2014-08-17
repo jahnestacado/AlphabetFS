@@ -26,6 +26,11 @@ io.sockets.on('connection', function(socket) {
         }
     });
 
+    socket.on('path-delete', function(path) {
+        bus.emit('path-delete', path);
+    });
+
+
 
     bus.onEvent(this, "socket-ui-event", function(data) {
         socket.emit(data.event, data.path);
@@ -40,6 +45,10 @@ function activateDir(targetDirPath) {
     alphabetDirectories.createAlphabetDirs(targetDirPath, content);
 }
 
+bus.onEvent(this, 'path-delete', function(path) {
+    var index = registeredDirs.indexOf(path);
+    registeredDirs.splice(index, 1);
+});
 
 function init(socket) {
     db.exists("abc-fs", "registered-paths", function(error, data) {
