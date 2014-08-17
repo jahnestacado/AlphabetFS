@@ -2,12 +2,11 @@ var fs = require('fs')
         , snitch = require('snitch')
         , hound = require('hound')
         , mover = require('./mover.js')
-        , bus = require('hermes-bus')
-        , db = require('../db/db-utils.js');
+        , bus = require('hermes-bus');
 
 
 function registerDirectory(targetDirPath) {
-    storeAndUpdateUI(targetDirPath);
+    bus.emit("store-path-n-update-ui", targetDirPath);
     var watcher = hound.watch(targetDirPath);
     watcher.on('create', function(file, stats) {
         //Only move the parent dir
@@ -21,18 +20,13 @@ function registerDirectory(targetDirPath) {
     watcher.on('delete', function(file) {
         console.log(file + ' was deleted')
     })
-}
 
-
-function storeAndUpdateUI(path) {
-    db.get("abc-fs", "registered-paths", function(error, registeredPaths) {
-        if (registeredPaths.indexOf(path) === -1) {
-            registeredPaths.push(path);
-            db.save("abc-fs", "registered-paths", registeredPaths);
-            bus.emit('socket-ui-event', {event: "register-path", path: path});
-        }
+    bus.onEvent(this, 'path-delete', function(path) {
+        watcher.unwatch(path);
     });
+
 }
+
 
 
 var checker = {
