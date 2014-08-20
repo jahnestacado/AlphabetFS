@@ -27,7 +27,7 @@ describe('setting up testing environment', function() {
         });
     }
 
-    
+
     function createTestFiles(fileNames) {
         getFullPaths(fileNames).forEach(function(name) {
             fs.openSync(name, 'w')
@@ -37,13 +37,17 @@ describe('setting up testing environment', function() {
 
     function areArraysEqual(a1, a2) {
         var areEqual = a1.length === a2.length;
-        a1.forEach(function(element) {
-            if (areEqual) {
-                areEqual = a2.indexOf(element) !== -1 && areEqual;
-            } else
-                return areEqual;
-        })
-        return areEqual;
+        if (areEqual) {
+            a1.sort();
+            a2.sort();
+            a1.forEach(function(element){
+                var index = a1.indexOf(element);
+                areEqual = element === a2[index] && areEqual;
+            });
+            return areEqual;
+        } else {
+            return areEqual;
+        }
     }
 
 
@@ -72,7 +76,7 @@ describe('setting up testing environment', function() {
         });
 
 
-        it("should gather all  paths ", function() {
+        it("should gather all paths ", function() {
             assert.equal(areArraysEqual(contents.allPaths, getFullPaths(testPaths.fileNames.concat(testPaths.dirNames))), true);
         });
     })
