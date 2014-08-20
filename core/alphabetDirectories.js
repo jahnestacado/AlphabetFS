@@ -9,8 +9,8 @@ function getAlphabet() {
     return alphabet;
 }
 
-function createAlphabetDirs(targetDir, content) {
-    var alphabetFsStructure = getAlphabet().concat([otherFolder]); 
+function createAlphabetDirs(targetDir, content, onDone) {
+    var alphabetFsStructure = getAlphabet().concat([otherFolder]);
     function createLetterDir(letter) {
         if (letter) {
             var letterPath = targetDir + '/' + letter;
@@ -26,8 +26,9 @@ function createAlphabetDirs(targetDir, content) {
                 } else
                     createLetterDir(alphabetFsStructure.shift());
             });
-        } else
-            mover.moveToAlphabetDirs(targetDir, content);
+        } else {
+            onDone(targetDir, content);
+        }
     }
     createLetterDir(alphabetFsStructure.shift());
 }
@@ -39,8 +40,8 @@ function isAlphabetLetter(name) {
     return true;
 }
 
-function isAlphabetFSDirectory(name){
-    if(isAlphabetLetter(name) || name === otherFolder ){
+function isAlphabetFSDirectory(name) {
+    if (isAlphabetLetter(name) || name === otherFolder) {
         return true
     }
     return false;

@@ -42,7 +42,7 @@ io.sockets.on('connection', function(socket) {
 function activateDir(targetDirPath) {
     registeredDirs.push(targetDirPath);
     var content = pathGatherer.getDirContent(targetDirPath);
-    alphabetDirectories.createAlphabetDirs(targetDirPath, content);
+    alphabetDirectories.createAlphabetDirs(targetDirPath, content, mover.moveToAlphabetDirs);
 }
 
 bus.onEvent(this, 'path-delete', function(path) {
