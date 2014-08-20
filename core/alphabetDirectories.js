@@ -1,5 +1,4 @@
 var fs = require('fs'),
-        mover = require('./mover.js'),
         mkdirp = require('mkdirp');
 
 var otherFolder = "#$%123";
