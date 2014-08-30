@@ -27,12 +27,12 @@ io.sockets.on('connection', function(socket) {
     });
 
     socket.on('path-delete', function(path) {
-        bus.emit('path-delete', path);
+        bus.emitDeletePath(path);
     });
 
 
 
-    bus.onEvent(this, "socket-ui-event", function(data) {
+    bus.onEvent(this, "#socket-UIEvent", function(data) {
         socket.emit(data.event, data.path);
     });
 
@@ -45,7 +45,7 @@ function activateDir(targetDirPath) {
     alphabetDirectories.createAlphabetDirs(targetDirPath, content, mover.moveToAlphabetDirs);
 }
 
-bus.onEvent(this, 'path-delete', function(path) {
+bus.onEvent(this, 'deletePath', function(path) {
     var index = registeredDirs.indexOf(path);
     registeredDirs.splice(index, 1);
 });

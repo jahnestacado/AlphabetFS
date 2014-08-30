@@ -4,17 +4,17 @@ var config = require('./db-config.js'),
 
 
 
-bus.onEvent(this, "store-path-n-update-ui", function(path) {
+bus.onEvent(this, "storePathNRefreshUI", function(path) {
     db.get("abc-fs", "registered-paths", function(error, registeredPaths) {
         if (registeredPaths.indexOf(path) === -1) {
             registeredPaths.push(path);
             db.save("abc-fs", "registered-paths", registeredPaths);
-            bus.emit('socket-ui-event', {event: "register-path", path: path});
+            bus.socket.emitUIEvent({event: "register-path", path: path});
         }
     });
 });
 
-bus.onEvent(this, "path-delete", function(path) {
+bus.onEvent(this, "deletePath", function(path) {
     db.get("abc-fs", "registered-paths", function(error, registeredPaths) {
         var index = registeredPaths.indexOf(path);
         registeredPaths.splice(index, 1);

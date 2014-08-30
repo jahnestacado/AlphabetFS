@@ -6,7 +6,7 @@ var fs = require('fs')
 
 
 function registerDirectory(targetDirPath) {
-    bus.emit("store-path-n-update-ui", targetDirPath);
+    bus.emitStorePathNRefreshUI(targetDirPath);
     var watcher = hound.watch(targetDirPath);
     watcher.on('create', function(file, stats) {
         //Only move the parent dir
@@ -21,7 +21,7 @@ function registerDirectory(targetDirPath) {
         console.log(file + ' was deleted')
     })
 
-    bus.onEvent(this, 'path-delete', function(path) {
+    bus.onEvent(this, 'deletPath', function(path) {
         watcher.unwatch(path);
     });
 
