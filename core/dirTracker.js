@@ -4,9 +4,8 @@ var fs = require('fs')
         , mover = require('./mover.js')
         , bus = require('hermes-bus');
 
-
 function registerDirectory(targetDirPath) {
-    bus.emitStorePathNRefreshUI(targetDirPath);
+    bus.emitStorePathNUpdateUI(targetDirPath);
     var watcher = hound.watch(targetDirPath);
     watcher.on('create', function(file, stats) {
         //Only move the parent dir
@@ -21,13 +20,13 @@ function registerDirectory(targetDirPath) {
         console.log(file + ' was deleted')
     })
 
-    bus.onEvent(this, 'deletPath', function(path) {
-        watcher.unwatch(path);
-    });
+    bus.onEvent('deletePath', function(path) {
+        if (path === targetDirPath) {
+            watcher.unwatch(path);
+        }
+    }).registerLocation(__filename);
 
 }
-
-
 
 var checker = {
     counter: 0,
@@ -41,7 +40,6 @@ var checker = {
         }
     }
 }
-
 
 exports.registerDirectory = registerDirectory;
 exports.checker = checker;

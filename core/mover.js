@@ -19,7 +19,6 @@ function moveToAlphabetDirs(targetDir, content) {
     }
 }
 
-
 function moveToLetterDir(targetDir, name, callback) {
     var originPath = targetDir + '/' + name;
     var destDir = targetDir + '/' + findDestDir(name) + '/' + name;

@@ -31,13 +31,11 @@ io.sockets.on('connection', function(socket) {
     });
 
 
-
-    bus.onEvent(this, "#socket-UIEvent", function(data) {
+    bus.onEvent("#socket-UIEvent", function(data) {
         socket.emit(data.event, data.path);
-    });
+    }).registerLocation(__filename);
 
 });
-
 
 function activateDir(targetDirPath) {
     registeredDirs.push(targetDirPath);
@@ -45,10 +43,10 @@ function activateDir(targetDirPath) {
     alphabetDirectories.createAlphabetDirs(targetDirPath, content, mover.moveToAlphabetDirs);
 }
 
-bus.onEvent(this, 'deletePath', function(path) {
+bus.onEvent('deletePath', function(path) {
     var index = registeredDirs.indexOf(path);
     registeredDirs.splice(index, 1);
-});
+}).registerLocation(__filename);
 
 function init(socket) {
     db.exists("abc-fs", "registered-paths", function(error, data) {
