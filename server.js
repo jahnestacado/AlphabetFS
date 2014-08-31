@@ -54,8 +54,7 @@ function init(socket) {
             db.get("abc-fs", "registered-paths", function(error, data) {
                 if (registeredDirs.length === 0) {
                     data.forEach(function(path) {
-                        activateDir(path);
-                        socket.emit("path-entry", path);
+                    socket.emit("path-entry", path);
                     });
                 } else {
                     socket.emit('init', data);
