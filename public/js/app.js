@@ -9,11 +9,11 @@ $('#submit-path').click(function(e) {
 
 
 socket.on("register-path", function(data) {
-    addPathRow(data);
+    addRow(data);
 });
 
 
-function addPathRow(path) {
+function addRow(path) {
     var listItem = $('<li/>').addClass('list-group-item').text(path);
 
     var closeBtn = $('<button/>').addClass('pull-right close-btn').text(htmlDecode('&#10006;')).click(function() {
@@ -33,10 +33,10 @@ function htmlDecode(value) {
 ;
 
 
-socket.on("init", function(data) {
+socket.on("initializeList", function(data) {
     $('#registered-paths').empty();
     data.forEach(function(path) {
-        addPathRow(path);
+        addRow(path);
     })
 });
 
