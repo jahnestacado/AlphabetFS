@@ -58,7 +58,6 @@ function init(socket) {
         key: "registered-paths",
         cb: function(data) {
             if (activeDirectories.length === 0) {
-                console.log(data);
                 data.forEach(function(path) {
                     activateDir(path);
                 });
