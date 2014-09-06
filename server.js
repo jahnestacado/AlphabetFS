@@ -34,7 +34,7 @@ io.sockets.on('connection', function(socket) {
     });
 
 
-    bus.onEvent("#socket-UIEvent", function(data) {
+    bus.onEvent("socket","UIEvent", function(data) {
         socket.emit(data.event, data.path);
     }).registerLocation(__filename);
 
