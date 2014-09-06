@@ -1,4 +1,4 @@
-var fs = require('fs-extra'),
+var fs = require('fs'),
         tracker = require('./dirTracker.js'),
         alphabetDirectories = require('./alphabetDirectories'),
         rmdir = require('rimraf');
