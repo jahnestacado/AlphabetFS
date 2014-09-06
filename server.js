@@ -11,9 +11,12 @@ var pathGatherer = require('./core/pathGatherer.js')
 
 server.listen(8085);
 
-var registeredDirs = [];
+var activeDirectories = [];
 app.use(express.static(__dirname + '/public/css'));
 app.use(express.static(__dirname + '/public'));
+
+
+bus.emitInitializeFields();
 
 io.sockets.on('connection', function(socket) {
     console.log("OnConnection ");
@@ -21,7 +24,7 @@ io.sockets.on('connection', function(socket) {
     init(socket);
 
     socket.on('path-entry', function(targetDirPath) {
-        if (registeredDirs.indexOf(targetDirPath) === -1) {
+        if (activeDirectories.indexOf(targetDirPath) === -1) {
             activateDir(targetDirPath);
         }
     });
@@ -38,33 +41,36 @@ io.sockets.on('connection', function(socket) {
 });
 
 function activateDir(targetDirPath) {
-    registeredDirs.push(targetDirPath);
+    activeDirectories.push(targetDirPath);
     var content = pathGatherer.getDirContent(targetDirPath);
     alphabetDirectories.createAlphabetDirs(targetDirPath, content, mover.moveToAlphabetDirs);
 }
 
 bus.onEvent('deletePath', function(path) {
-    var index = registeredDirs.indexOf(path);
-    registeredDirs.splice(index, 1);
+    var index = activeDirectories.indexOf(path);
+    activeDirectories.splice(index, 1);
 }).registerLocation(__filename);
 
 function init(socket) {
-    db.exists("abc-fs", "registered-paths", function(error, data) {
-        if (data) {
-            db.get("abc-fs", "registered-paths", function(error, data) {
-                if (registeredDirs.length === 0) {
-                    data.forEach(function(path) {
-                    socket.emit("path-entry", path);
-                    });
-                } else {
-                    socket.emit('init', data);
-                }
+
+    var action = {
+        bucket: "abc-fs",
+        key: "registered-paths",
+        cb: function(data) {
+            if (activeDirectories.length === 0) {
+                console.log(data);
+                data.forEach(function(path) {
+                    activateDir(path);
+                });
+            } else {
+                socket.emit('initializeList', data);
             }
-            );
-        } else {
-            db.save("abc-fs", "registered-paths", []);
         }
-    });
+    };
+
+    bus.emitOnDataGet(action);
+
+
 }
 
 
