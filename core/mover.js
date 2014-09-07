@@ -2,8 +2,6 @@ var fs = require('fs'),
         alphabetDirectories = require('./alphabetDirectories'),
         rmdir = require('rimraf');
 
-
-
 function moveToAlphabetDirs(targetDir, content) {
     var allPaths = content.allPaths;
     var checker = require('./dirTracker.js').checker;
