@@ -5,7 +5,7 @@ var fs = require('fs')
         , bus = require('hermes-bus');
 
 function registerDirectory(targetDirPath) {
-    bus.emitStorePath(targetDirPath);
+    bus.db.emitStorePath(targetDirPath);
     bus.socket.emitUIEvent({event: "register-path", path: targetDirPath});
     var watcher = hound.watch(targetDirPath);
     watcher.on('create', function(file, stats) {
