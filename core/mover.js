@@ -1,12 +1,12 @@
 var fs = require('fs'),
-        tracker = require('./dirTracker.js'),
         alphabetDirectories = require('./alphabetDirectories'),
         rmdir = require('rimraf');
 
-var checker = tracker.checker;
+
 
 function moveToAlphabetDirs(targetDir, content) {
     var allPaths = content.allPaths;
+    var checker = require('./dirTracker.js').checker;
     checker.numOfPaths = allPaths.length;
     if (checker.numOfPaths === 0) {
         checker.trackingCheck(targetDir);
@@ -33,7 +33,7 @@ function moveToLetterDir(targetDir, name, callback) {
                     return;
                 }
                 if (callback) {
-                    checker.trackingCheck(targetDir);
+                    callback(targetDir);
                 }
             });
 
@@ -45,7 +45,7 @@ function moveToLetterDir(targetDir, name, callback) {
                 return;
             }
             if (callback) {
-                checker.trackingCheck(targetDir);
+                callback(targetDir);
             }
         });
     }
