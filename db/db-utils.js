@@ -8,7 +8,14 @@ var pathsStoreObject = {
     initialValue: []
 };
 
-bus.onEvent("storePath", function(path) {
+(function initializeFields() {
+    var fields = [pathsStoreObject];
+    fields.forEach(function(field) {
+        createField(field.bucket, field.key, field.initialValue);
+    });
+})();
+
+bus.onEvent("db", "storePath", function(path) {
     db.get(pathsStoreObject.bucket, pathsStoreObject.key, function(error, registeredPaths) {
         if (registeredPaths.indexOf(path) === -1) {
             registeredPaths.push(path);
@@ -17,7 +24,7 @@ bus.onEvent("storePath", function(path) {
     });
 }).registerLocation(__filename);
 
-bus.onEvent("deletePath", function(path) {
+bus.onEvent("db", "deletePath", function(path) {
     db.get(pathsStoreObject.bucket, pathsStoreObject.key, function(error, registeredPaths) {
         var index = registeredPaths.indexOf(path);
         registeredPaths.splice(index, 1);
@@ -25,14 +32,8 @@ bus.onEvent("deletePath", function(path) {
     });
 }).registerLocation(__filename);
 
-bus.onEvent("initializeFields", function(action) {
-    var fields = [pathsStoreObject];
-    fields.forEach(function(field) {
-        createField(field.bucket, field.key, field.initialValue);
-    })
-});
 
-bus.onEvent("onDataGet", function(action) {
+bus.onEvent("db", "onDataGet", function(action) {
     db.get(action.bucket, action.key, function(error, data) {
         action.cb(data);
     });
