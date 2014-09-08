@@ -7,12 +7,19 @@ var fs = require('fs')
 function registerDirectory(targetDirPath) {
     bus.db.emitStorePath(targetDirPath);
     bus.socket.emitUIEvent({event: "register-path", path: targetDirPath});
+
     var watcher = hound.watch(targetDirPath);
+    var fileUnderTransfer;;
     watcher.on('create', function(file, stats) {
         //Only move the parent dir
         if (file.split("/").length - 1 === targetDirPath.split("/").length) {
+            fileUnderTransfer = file;
+            bus.socket.emitUIEvent({event: 'start-blinking', path: targetDirPath});
             snitch.onStopGrowing(file, function() {
                 mover.moveToLetterDir(targetDirPath, file.replace(targetDirPath + "/", "").trim());
+                if (fileUnderTransfer === file) {
+                    bus.socket.emitUIEvent({event: 'stop-blinking', path: targetDirPath});
+                }
             });
         }
     });

@@ -26,19 +26,20 @@ $('#submit-path').click(function(e) {
 function addRow(path) {
     var listItem = $('<li/>').addClass('list-group-item').text(path);
 
-    var closeBtn = $('<button/>').addClass('pull-right close-btn').text(htmlDecode('&#10006;')).click(function() {
+    var closeBtn = $('<img/>').addClass('pull-right close-btn').attr('src', '../resources/close_btn.png').click(function() {
         socket.emit('path-delete', path);
         listItem.remove();
     });
 
+    var statusIcon = $('<img/>').addClass('pull-right status-ball').attr('src', '../resources/red_ball.png').prop('animation-active', false);
+
+
     var listItem = $('<li/>').addClass('list-group-item').text(path);
 
     listItem.append(closeBtn);
-    $('#registered-paths').append(listItem);
-}
+    listItem.append(statusIcon);
 
-function htmlDecode(value) {
-    return $('<div/>').html(value).text();
+    $('#registered-paths').append(listItem);
 }
 
 
@@ -47,5 +48,55 @@ function emptyPathList() {
 }
 
 
+function findListItemWith(itemText, onFind) {
+    $('#registered-paths li ').each(function() {
+        if ($(this).text() === itemText) {
+            onFind($(this));
+        }
+    });
+}
 
 
+
+socket.on('start-blinking', function(path) {
+    startBlinking(path);
+});
+
+socket.on('stop-blinking', function(path) {
+    stopBlinking(path);
+});
+
+function startBlinking(path) {
+    findListItemWith(path, function(elQ) {
+        var statusBallElQ = elQ.find('.status-ball');
+        statusBallElQ.attr('src', '../resources/green_ball.png');
+        function checkAnimationStatus() {
+            var result = statusBallElQ.prop('animation-active');
+            return result;
+        }
+
+        if (!checkAnimationStatus()) {
+            statusBallElQ.prop('animation-active', true);
+
+            var intervalId = setInterval(function() {
+                if (checkAnimationStatus()) {
+                    elQ.find('.status-ball').fadeOut(500).fadeIn(500);
+                } else {
+                    clearInterval(intervalId);
+                    setTimeout(function() {
+                        statusBallElQ.attr('src', '../resources/red_ball.png');
+                    }, 1000);
+                }
+            }, 1000);
+        }
+
+    })
+}
+
+function stopBlinking(path) {
+    findListItemWith(path, function(elQ) {
+        var statusBallElQ = elQ.find('.status-ball');
+        statusBallElQ.prop('animation-active', false);
+
+    })
+}
