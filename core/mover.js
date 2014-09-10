@@ -1,23 +1,24 @@
-var fs = require('fs-extra'),
-        alphabetDirectories = require('./alphabetDirectories'),
-        rmdir = require('rimraf');
-var checker = require('./dirTracker.js').checker;
+var fs = require('fs-extra');
+var alphabetDirectories = require('./alphabetDirectories');
+var rmdir = require('rimraf');
+var dirTracker = require('./dirTracker');
 
 function moveToAlphabetDirs(targetDir, content) {
     var allPaths = content.allPaths;
-    checker.numOfPaths = allPaths.length;
-    if (checker.numOfPaths === 0) {
-        checker.trackingCheck(targetDir);
+    var handler = dirTracker.initialStateHandler();
+    handler.numOfPaths = allPaths.length;
+    if (handler.numOfPaths === 0) {
+        handler.requestDirRegistry(targetDir);
     }
     else {
         allPaths.map(function(path) {
             var name = path.split('/').pop();
-            moveToLetterDir(targetDir, name, checker.trackingCheck);
+            moveToLetterDir(targetDir, name, handler);
         });
     }
 }
 
-function moveToLetterDir(targetDir, name, callback) {
+function moveToLetterDir(targetDir, name, handler) {
     var originPath = targetDir + '/' + name;
     var destDir = targetDir + '/' + findDestDir(name) + '/' + name;
     var isDirectory = fs.lstatSync(originPath).isDirectory();
@@ -30,8 +31,8 @@ function moveToLetterDir(targetDir, name, callback) {
                     console.log("error");
                     return;
                 }
-                if (callback) {
-                     checker.trackingCheck(targetDir);
+                if (handler) {
+                    handler.requestDirRegistry(targetDir);
                 }
             });
 
@@ -42,8 +43,8 @@ function moveToLetterDir(targetDir, name, callback) {
                 console.log("error");
                 return;
             }
-            if (callback) {
-                 checker.trackingCheck(targetDir);
+            if (handler) {
+                handler.requestDirRegistry(targetDir);
             }
         });
     }

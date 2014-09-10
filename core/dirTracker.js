@@ -1,15 +1,16 @@
 var fs = require('fs')
-        , snitch = require('snitch')
-        , hound = require('hound')
-        , mover = require('./mover.js')
-        , bus = require('hermes-bus');
+var snitch = require('snitch');
+var hound = require('hound');
+var mover = require('./mover.js');
+var bus = require('hermes-bus');
+
 
 function registerDirectory(targetDirPath) {
     bus.db.emitStorePath(targetDirPath);
     bus.socket.emitUIEvent({event: "register-path", path: targetDirPath});
     var watcher = hound.watch(targetDirPath);
     var fileUnderTransfer;
-    
+
     watcher.on('create', function(file, stats) {
         //Only move the parent dir
         if (file.split("/").length - 1 === targetDirPath.split("/").length) {
@@ -36,21 +37,22 @@ function registerDirectory(targetDirPath) {
 
 }
 
-var checker = {
-    counter: 0,
-    numOfPaths: 0,
-    trackingCheck: function(targetDirPath) {
-        this.counter++;
-        if (this.counter === this.numOfPaths || this.numOfPaths === 0) {
-            registerDirectory(targetDirPath);
-            this.counter = 0;
-            this.numOfPaths = 0;
+function initialStateHandler() {
+    return {
+        counter: 0,
+        numOfPaths: 0,
+        requestDirRegistry: function(targetDirPath) {
+            this.counter++;
+            if (this.counter === this.numOfPaths || this.numOfPaths === 0) {
+                registerDirectory(targetDirPath);
+                this.counter = 0;
+                this.numOfPaths = 0;
+            }
         }
     }
 }
 
-//exports.registerDirectory = registerDirectory;
-exports.checker = checker;
+exports.initialStateHandler = initialStateHandler;
 
 
 
