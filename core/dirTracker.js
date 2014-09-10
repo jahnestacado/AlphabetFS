@@ -7,9 +7,9 @@ var fs = require('fs')
 function registerDirectory(targetDirPath) {
     bus.db.emitStorePath(targetDirPath);
     bus.socket.emitUIEvent({event: "register-path", path: targetDirPath});
-
     var watcher = hound.watch(targetDirPath);
-    var fileUnderTransfer;;
+    var fileUnderTransfer;
+    
     watcher.on('create', function(file, stats) {
         //Only move the parent dir
         if (file.split("/").length - 1 === targetDirPath.split("/").length) {
@@ -28,7 +28,7 @@ function registerDirectory(targetDirPath) {
         console.log(file + ' was deleted')
     })
 
-    bus.onEvent('deletePath', function(path) {
+    bus.onEvent('db', 'deletePath', function(path) {
         if (path === targetDirPath) {
             watcher.unwatch(path);
         }
@@ -49,7 +49,7 @@ var checker = {
     }
 }
 
-exports.registerDirectory = registerDirectory;
+//exports.registerDirectory = registerDirectory;
 exports.checker = checker;
 
 

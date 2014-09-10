@@ -36,13 +36,13 @@ io.sockets.on('connection', function(socket) {
 });
 
 
-bus.onEvent('deletePath', function(path) {
+bus.onEvent('db', 'deletePath', function(path) {
     var index = activeDirectories.indexOf(path);
     activeDirectories.splice(index, 1);
 }).registerLocation(__filename);
 
 function init(socket) {
-
+    console.log("On refresh ", activeDirectories);
     var action = {
         bucket: "abc-fs",
         key: "registered-paths",
@@ -53,14 +53,14 @@ function init(socket) {
                     activeDirectories.push(path);
                 });
             } else {
+                // On page reload
                 socket.emit('initializeList', data);
+                bus.socket.emitInitStatusOfBalls();
             }
         }
     };
 
     bus.db.emitOnDataGet(action);
-
-
 }
 
 

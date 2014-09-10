@@ -69,34 +69,26 @@ socket.on('stop-blinking', function(path) {
 function startBlinking(path) {
     findListItemWith(path, function(elQ) {
         var statusBallElQ = elQ.find('.status-ball');
-        statusBallElQ.attr('src', '../resources/green_ball.png');
-        function checkAnimationStatus() {
-            var result = statusBallElQ.prop('animation-active');
-            return result;
+        if (elQ) {
+            statusBallElQ.attr('src', '../resources/green_ball_anime.gif');
+            function checkAnimationStatus() {
+                var result = statusBallElQ.prop('animation-active');
+                return result;
+            }
+
+            if (!checkAnimationStatus()) {
+                statusBallElQ.prop('animation-active', true);
+            }
         }
-
-        if (!checkAnimationStatus()) {
-            statusBallElQ.prop('animation-active', true);
-
-            var intervalId = setInterval(function() {
-                if (checkAnimationStatus()) {
-                    elQ.find('.status-ball').fadeOut(500).fadeIn(500);
-                } else {
-                    clearInterval(intervalId);
-                    setTimeout(function() {
-                        statusBallElQ.attr('src', '../resources/red_ball.png');
-                    }, 1000);
-                }
-            }, 1000);
-        }
-
-    })
+    });
 }
 
 function stopBlinking(path) {
     findListItemWith(path, function(elQ) {
         var statusBallElQ = elQ.find('.status-ball');
-        statusBallElQ.prop('animation-active', false);
-
-    })
+        if (elQ) {
+            statusBallElQ.prop('animation-active', false);
+            statusBallElQ.attr('src', '../resources/red_ball.png');
+        }
+    });
 }
