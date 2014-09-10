@@ -1,7 +1,7 @@
-var pathGatherer = require('./../core/pathGatherer.js'),
-        mover = require('./../core/mover.js'),
-        alphabetDirectories = require('./../core/alphabetDirectories'),
-        bus = require('hermes-bus');
+var pathGatherer = require('./../core/pathGatherer.js');
+var mover = require('./../core/mover.js');
+var alphabetDirectories = require('./../core/alphabetDirectories');
+var bus = require('hermes-bus');
 
 bus.onEvent("core", "activateDirectory", function(targetDirPath) {
     var content = pathGatherer.getDirContent(targetDirPath);

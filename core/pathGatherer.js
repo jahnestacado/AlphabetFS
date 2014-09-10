@@ -1,11 +1,11 @@
-var fs = require('fs')
-        , alphabetDirectories = require('./alphabetDirectories')
+var fs = require('fs');
+var alphabetDirectories = require('./alphabetDirectories');
 
 function getDirContent(targetDirPath) {
     var filePaths = [];
     var dirPaths = [];
     var contentNames = fs.readdirSync(targetDirPath);
-    
+
     contentNames.forEach(function(name) {
         var path = targetDirPath + '/' + name;
         dirOrFileFilter(path, dirPaths, filePaths);
@@ -14,9 +14,9 @@ function getDirContent(targetDirPath) {
     var contentHolder = {
         filePaths: filePaths,
         dirPaths: dirPaths,
-        allPaths: filePaths.concat(dirPaths) 
-        }
-   
+        allPaths: filePaths.concat(dirPaths)
+    }
+
     return contentHolder;
 }
 

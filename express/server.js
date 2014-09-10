@@ -1,8 +1,8 @@
 var express = require('express')
-        , app = express()
-        , server = require('http').createServer(app)
-        , io = require('socket.io').listen(server)
-        , bus = require('hermes-bus');
+var app = express();
+var server = require('http').createServer(app);
+var io = require('socket.io').listen(server);
+var bus = require('hermes-bus');
 
 server.listen(8085);
 
@@ -42,7 +42,6 @@ bus.onEvent('db', 'deletePath', function(path) {
 }).registerLocation(__filename);
 
 function init(socket) {
-    console.log("On refresh ", activeDirectories);
     var action = {
         bucket: "abc-fs",
         key: "registered-paths",

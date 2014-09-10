@@ -1,6 +1,6 @@
-var config = require('./db-config.js'),
-        bus = require('hermes-bus'),
-        db = require('riak-js').getClient({host: config.host, port: config.port});
+var config = require('./db-config.js');
+var bus = require('hermes-bus');
+var db = require('riak-js').getClient({host: config.host, port: config.port});
 
 var pathsStoreObject = {
     bucket: "abc-fs",

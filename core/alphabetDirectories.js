@@ -1,6 +1,5 @@
-var fs = require('fs'),
-        mkdirp = require('mkdirp');
-
+var fs = require('fs');
+var mkdirp = require('mkdirp');
 var otherFolder = "#$%123";
 
 function getAlphabet() {
