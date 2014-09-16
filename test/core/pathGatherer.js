@@ -3,7 +3,6 @@ var pathGatherer = require("../../core/pathGatherer.js");
 var rmdir = require('rimraf');
 var fs = require('fs');
 
-
 describe('setting up testing environment', function() {
     var testRoot = "tester";
 
@@ -12,14 +11,11 @@ describe('setting up testing environment', function() {
         dirNames: ["asd", "OJk", "KHTR", "GJyf"],
     };
 
-
     function getFullPaths(names) {
-        return names.reduce(function(fullPaths, name) {
-            fullPaths.push(testRoot + '/' + name);
-            return fullPaths;
-        }, []);
+        return names.map(function(name) {
+            return testRoot + '/' + name;
+        });
     }
-
 
     function createTestDirs(dirNames) {
         getFullPaths(dirNames).forEach(function(name) {
@@ -27,13 +23,11 @@ describe('setting up testing environment', function() {
         });
     }
 
-
     function createTestFiles(fileNames) {
         getFullPaths(fileNames).forEach(function(name) {
             fs.openSync(name, 'w')
         });
     }
-
 
     function areArraysEqual(a1, a2) {
         var areEqual = a1.length === a2.length;
@@ -50,13 +44,11 @@ describe('setting up testing environment', function() {
         }
     }
 
-
     before(function() {
         fs.mkdirSync(testRoot);
         createTestFiles(testPaths.fileNames);
         createTestDirs(testPaths.dirNames);
     });
-
 
     describe('gather paths', function() {
 
@@ -80,7 +72,6 @@ describe('setting up testing environment', function() {
             assert.equal(areArraysEqual(contents.allPaths, getFullPaths(testPaths.fileNames.concat(testPaths.dirNames))), true);
         });
     })
-
 
     after(function() {
         rmdir.sync(testRoot);
