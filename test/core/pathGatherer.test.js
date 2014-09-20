@@ -1,12 +1,12 @@
-var assert = require("assert");
-var pathGatherer = require("../../core/pathGatherer.js");
+var assert = require('assert');
 var rmdir = require('rimraf');
 var fs = require('fs');
+var pathGatherer = require("./../../core/pathGatherer.js");
 
 describe('setting up testing environment', function() {
     var testRoot = "tester";
 
-    var testPaths = {
+    var data = {
         fileNames: ["a1.txt", "d2.pdf", "jh.8", "787.ari"],
         dirNames: ["asd", "OJk", "KHTR", "GJyf"],
     };
@@ -34,7 +34,7 @@ describe('setting up testing environment', function() {
         if (areEqual) {
             a1.sort();
             a2.sort();
-            a1.forEach(function(element){
+            a1.forEach(function(element) {
                 var index = a1.indexOf(element);
                 areEqual = element === a2[index] && areEqual;
             });
@@ -46,11 +46,11 @@ describe('setting up testing environment', function() {
 
     before(function() {
         fs.mkdirSync(testRoot);
-        createTestFiles(testPaths.fileNames);
-        createTestDirs(testPaths.dirNames);
+        createTestFiles(data.fileNames);
+        createTestDirs(data.dirNames);
     });
-
-    describe('gather paths', function() {
+    
+    describe('invoke getDirContent()', function() {
 
         var contents;
         before(function() {
@@ -59,17 +59,17 @@ describe('setting up testing environment', function() {
 
 
         it("should gather all file paths ", function() {
-            assert.equal(areArraysEqual(contents.filePaths, getFullPaths(testPaths.fileNames)), true);
+            assert.equal(areArraysEqual(contents.filePaths, getFullPaths(data.fileNames)), true);
         });
 
 
         it("should gather all directory paths ", function() {
-            assert.equal(areArraysEqual(contents.dirPaths, getFullPaths(testPaths.dirNames)), true);
+            assert.equal(areArraysEqual(contents.dirPaths, getFullPaths(data.dirNames)), true);
         });
 
 
         it("should gather all paths ", function() {
-            assert.equal(areArraysEqual(contents.allPaths, getFullPaths(testPaths.fileNames.concat(testPaths.dirNames))), true);
+            assert.equal(areArraysEqual(contents.allPaths, getFullPaths(data.fileNames.concat(data.dirNames))), true);
         });
     })
 
