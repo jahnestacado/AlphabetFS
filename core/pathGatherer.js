@@ -8,7 +8,7 @@ function getDirContent(targetDirPath) {
 
     contentNames.forEach(function(name) {
         var path = targetDirPath + '/' + name;
-        dirOrFileFilter(path, dirPaths, filePaths);
+        dirOrFileHandler(path, dirPaths, filePaths);
     });
 
     var contentHolder = {
@@ -21,7 +21,7 @@ function getDirContent(targetDirPath) {
 }
 
 
-function dirOrFileFilter(path, dirPaths, filePaths) {
+function dirOrFileHandler(path, dirPaths, filePaths) {
     var name = path.split('/').pop();
     if (fs.lstatSync(path).isDirectory() && !alphabetDirectories.isAlphabetFSDirectory(name)) {
         dirPaths.push(path);
