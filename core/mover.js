@@ -2,25 +2,31 @@ var fs = require('fs-extra');
 var alphabetDirectories = require('./alphabetDirectories');
 var rmdir = require('rimraf');
 var dirTracker = require('./dirTracker');
+var bus = require('hermes-bus');
 
-function moveToAlphabetDirs(targetDir, content) {
-    var allPaths = content.allPaths;
+bus.onEvent('core', 'moveToAlphabetDirs', function(data) {
+    var allPaths = data.content.allPaths;
     var handler = dirTracker.initialStateHandler();
     handler.numOfPaths = allPaths.length;
     if (handler.numOfPaths === 0) {
-        handler.requestDirRegistry(targetDir);
+        handler.requestDirRegistry(data.targetDir);
     }
     else {
         allPaths.map(function(path) {
             var name = path.split('/').pop();
-            moveToLetterDir(targetDir, name, handler);
+            moveToLetterDir(data.targetDir, name, handler);
         });
     }
-}
+});
 
-function moveToLetterDir(targetDir, name, handler) {
-    var originPath = targetDir + '/' + name;
-    var destDir = targetDir + '/' + findDestDir(name) + '/' + name;
+bus.onEvent('core', 'moveToLetterDir', function(data) {
+    moveToLetterDir(data.targetDir, data.fileName, data.handler);
+});
+
+
+function moveToLetterDir(targetDir, fileName, handler) {
+    var originPath = targetDir + '/' + fileName;
+    var destDir = targetDir + '/' + findDestDir(fileName) + '/' + fileName;
     var isDirectory = fs.lstatSync(originPath).isDirectory();
     if (isDirectory) {
         fs.copy(originPath, destDir, function(error) {
@@ -57,6 +63,3 @@ function findDestDir(name) {
     }
     return alphabetDirectories.otherFolder;
 }
-
-exports.moveToAlphabetDirs = moveToAlphabetDirs;
-exports.moveToLetterDir = moveToLetterDir;

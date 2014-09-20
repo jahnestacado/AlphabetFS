@@ -1,5 +1,6 @@
 var fs = require('fs');
 var mkdirp = require('mkdirp');
+var bus = require('hermes-bus');
 var otherFolder = "#$%123";
 
 function getAlphabet() {
@@ -7,7 +8,7 @@ function getAlphabet() {
     return alphabet;
 }
 
-function createAlphabetDirs(targetDir, content, onDone) {
+function initiateStructure(targetDir, content) {
     var alphabetFsStructure = getAlphabet().concat([otherFolder]);
     function createLetterDir(letter) {
         if (letter) {
@@ -25,7 +26,7 @@ function createAlphabetDirs(targetDir, content, onDone) {
                     createLetterDir(alphabetFsStructure.shift());
             });
         } else {
-            onDone(targetDir, content);
+            bus.core.emitMoveToAlphabetDirs({targetDir:targetDir, content:content});
         }
     }
     createLetterDir(alphabetFsStructure.shift());
@@ -45,7 +46,7 @@ function isAlphabetFSDirectory(name) {
     return false;
 }
 
-exports.createAlphabetDirs = createAlphabetDirs;
+exports.initiateStructure = initiateStructure;
 exports.isAlphabetLetter = isAlphabetLetter;
 exports.otherFolder = otherFolder;
 exports.isAlphabetFSDirectory = isAlphabetFSDirectory;

@@ -1,7 +1,6 @@
 var fs = require('fs')
 var snitch = require('snitch');
 var hound = require('hound');
-var mover = require('./mover.js');
 var bus = require('hermes-bus');
 
 
@@ -17,7 +16,8 @@ function registerDirectory(targetDirPath) {
             fileUnderTransfer = file;
             bus.socket.emitUIEvent({event: 'start-blinking', path: targetDirPath});
             snitch.onStopGrowing(file, function() {
-                mover.moveToLetterDir(targetDirPath, file.replace(targetDirPath + "/", "").trim());
+                var fileName = file.replace(targetDirPath + "/", "").trim();
+                bus.core.emitMoveToLetterDir({targetDir: targetDirPath, fileName: fileName});
                 if (fileUnderTransfer === file) {
                     bus.socket.emitUIEvent({event: 'stop-blinking', path: targetDirPath});
                 }
