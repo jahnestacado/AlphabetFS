@@ -8,9 +8,15 @@ var fs = require('fs');
 var rmdir = require('rimraf');
 var testingFolder = "testing-workspace";
 
+var old = abcDirs.isAlphabetFSDirectory;
+
 describe('starting integration tests for alphabetDirectories module', function() {
     bus.subscribeEventsFrom('./core/mover.js');
 
+    var isAlphabetFSDirectoryStub = sinon.stub(abcDirs, 'isAlphabetFSDirectory', function() {
+        return false;
+    });
+    
     describe('invoke initiateStructure', function() {
         var content = {};
         var abcDirTestingPaths = abcDirs.getAlphabetFsStructure().map(function(absFsDir) {
@@ -18,10 +24,6 @@ describe('starting integration tests for alphabetDirectories module', function()
         });
 
         bus.core.emitMoveToAlphabetDirs = sinon.spy();
-
-        abcDirs.isAlphabetFSDirectory = function() {
-            return false
-        };
 
         before(function(done) {
             abcDirs.initiateStructure(testingFolder, content, done);
@@ -79,6 +81,7 @@ describe('starting integration tests for alphabetDirectories module', function()
 
     after(function() {
         rmdir.sync(testingFolder);
+        isAlphabetFSDirectoryStub.restore();
     });
 
 
