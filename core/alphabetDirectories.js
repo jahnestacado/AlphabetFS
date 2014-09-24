@@ -8,8 +8,12 @@ function getAlphabet() {
     return alphabet;
 }
 
-function initiateStructure(targetDir, content) {
-    var alphabetFsStructure = getAlphabet().concat([otherFolder]);
+function getAlphabetFsStructure(){
+    return getAlphabet().concat([otherFolder]);
+}
+
+function initiateStructure(targetDir, content, onDone) {
+    var alphabetFsStructure = getAlphabetFsStructure();
     function createLetterDir(letter) {
         if (letter) {
             var letterPath = targetDir + '/' + letter;
@@ -20,6 +24,7 @@ function initiateStructure(targetDir, content) {
                             console.log("Error occured: " + error);
                         }
                         console.log("Folder Created " + letterPath);
+                        
                         createLetterDir(alphabetFsStructure.shift());
                     });
                 } else
@@ -27,6 +32,7 @@ function initiateStructure(targetDir, content) {
             });
         } else {
             bus.core.emitMoveToAlphabetDirs({targetDir:targetDir, content:content});
+            onDone();
         }
     }
     createLetterDir(alphabetFsStructure.shift());
@@ -50,6 +56,4 @@ exports.initiateStructure = initiateStructure;
 exports.isAlphabetLetter = isAlphabetLetter;
 exports.otherFolder = otherFolder;
 exports.isAlphabetFSDirectory = isAlphabetFSDirectory;
-
-
- 
+exports.getAlphabetFsStructure = getAlphabetFsStructure;
