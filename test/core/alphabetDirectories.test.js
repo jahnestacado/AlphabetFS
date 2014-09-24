@@ -10,13 +10,13 @@ var testingFolder = "testing-workspace";
 
 var old = abcDirs.isAlphabetFSDirectory;
 
-describe('starting integration tests for alphabetDirectories module', function() {
+describe('#################### Starting integration tests for alphabetDirectories module', function() {
     bus.subscribeEventsFrom('./core/mover.js');
 
     var isAlphabetFSDirectoryStub = sinon.stub(abcDirs, 'isAlphabetFSDirectory', function() {
         return false;
     });
-    
+
     describe('invoke initiateStructure', function() {
         var content = {};
         var abcDirTestingPaths = abcDirs.getAlphabetFsStructure().map(function(absFsDir) {
@@ -82,6 +82,8 @@ describe('starting integration tests for alphabetDirectories module', function()
     after(function() {
         rmdir.sync(testingFolder);
         isAlphabetFSDirectoryStub.restore();
+        console.log("  #################### End of integration tests for alphabetDirectories module")
+
     });
 
 

@@ -4,61 +4,65 @@ var fs = require('fs');
 var pathGatherer = require("./../../core/pathGatherer.js");
 var utils = require("./../utils.js");
 
-describe('setting up testing environment', function() {
-    var testRoot = "tester";
+describe("#################### Start integration tests for pathGatherer module", function() {
+    
+    describe('setting up testing environment', function() {
+        var testRoot = "tester";
 
-    var data = {
-        fileNames: ["a1.txt", "d2.pdf", "jh.8", "787.ari"],
-        dirNames: ["asd", "OJk", "KHTR", "GJyf"],
-        abcDirs: ['A', 'B', 'C']
-    };
+        var data = {
+            fileNames: ["a1.txt", "d2.pdf", "jh.8", "787.ari"],
+            dirNames: ["asd", "OJk", "KHTR", "GJyf"],
+            abcDirs: ['A', 'B', 'C']
+        };
 
-    function getFullPaths(names) {
-        return names.map(function(name) {
-            return testRoot + '/' + name;
-        });
-    }
+        function getFullPaths(names) {
+            return names.map(function(name) {
+                return testRoot + '/' + name;
+            });
+        }
 
-    function createTestDirs(dirNames) {
-        getFullPaths(dirNames).forEach(function(name) {
-            fs.mkdirSync(name);
-        });
-    }
+        function createTestDirs(dirNames) {
+            getFullPaths(dirNames).forEach(function(name) {
+                fs.mkdirSync(name);
+            });
+        }
 
-    function createTestFiles(fileNames) {
-        getFullPaths(fileNames).forEach(function(name) {
-            fs.openSync(name, 'w');
-        });
-    }
+        function createTestFiles(fileNames) {
+            getFullPaths(fileNames).forEach(function(name) {
+                fs.openSync(name, 'w');
+            });
+        }
 
-    before(function() {
-        fs.mkdirSync(testRoot);
-        createTestFiles(data.fileNames);
-        createTestDirs(data.dirNames);
-        createTestDirs(data.abcDirs);
-    });
-
-    describe('invoke getDirContent()', function() {
-
-        var contents;
         before(function() {
-            contents = pathGatherer.getDirContent(testRoot);
+            fs.mkdirSync(testRoot);
+            createTestFiles(data.fileNames);
+            createTestDirs(data.dirNames);
+            createTestDirs(data.abcDirs);
         });
 
-        it("should gather all file paths ", function() {
-            assert.equal(utils.areArrayContentsEqual(contents.filePaths, getFullPaths(data.fileNames)), true);
-        });
+        describe('invoke getDirContent()', function() {
 
-        it("should gather all non-ABC-letter directory paths  ", function() {
-            assert.equal(utils.areArrayContentsEqual(contents.dirPaths, getFullPaths(data.dirNames)), true);
-        });
+            var contents;
+            before(function() {
+                contents = pathGatherer.getDirContent(testRoot);
+            });
 
-        it("should gather all paths ", function() {
-            assert.equal(utils.areArrayContentsEqual(contents.allPaths, getFullPaths(data.fileNames.concat(data.dirNames))), true);
-        });
-    })
+            it("should gather all file paths ", function() {
+                assert.equal(utils.areArrayContentsEqual(contents.filePaths, getFullPaths(data.fileNames)), true);
+            });
 
-    after(function() {
-        rmdir.sync(testRoot);
+            it("should gather all non-ABC-letter directory paths  ", function() {
+                assert.equal(utils.areArrayContentsEqual(contents.dirPaths, getFullPaths(data.dirNames)), true);
+            });
+
+            it("should gather all paths ", function() {
+                assert.equal(utils.areArrayContentsEqual(contents.allPaths, getFullPaths(data.fileNames.concat(data.dirNames))), true);
+            });
+        })
+
+        after(function() {
+            rmdir.sync(testRoot);
+            console.log("  #################### End of integration tests for pathGatherer module")
+        });
     });
-})
+});
