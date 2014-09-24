@@ -43,7 +43,6 @@ describe('setting up testing environment', function() {
         var contents;
         before(function() {
             contents = pathGatherer.getDirContent(testRoot);
-            console.log(contents)
         });
 
         it("should gather all file paths ", function() {
@@ -61,7 +60,5 @@ describe('setting up testing environment', function() {
 
     after(function() {
         rmdir.sync(testRoot);
-         delete require.cache[require.resolve('./../../core/alphabetDirectories.js')];
-        delete require.cache[require.resolve("./../../core/pathGatherer.js")];
     });
 })
