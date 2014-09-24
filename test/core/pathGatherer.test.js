@@ -27,7 +27,7 @@ describe('setting up testing environment', function() {
 
     function createTestFiles(fileNames) {
         getFullPaths(fileNames).forEach(function(name) {
-            fs.openSync(name, 'w')
+            fs.openSync(name, 'w');
         });
     }
 
@@ -43,18 +43,16 @@ describe('setting up testing environment', function() {
         var contents;
         before(function() {
             contents = pathGatherer.getDirContent(testRoot);
+            console.log(contents)
         });
-
 
         it("should gather all file paths ", function() {
             assert.equal(utils.areArrayContentsEqual(contents.filePaths, getFullPaths(data.fileNames)), true);
         });
 
-
         it("should gather all non-ABC-letter directory paths  ", function() {
             assert.equal(utils.areArrayContentsEqual(contents.dirPaths, getFullPaths(data.dirNames)), true);
         });
-
 
         it("should gather all paths ", function() {
             assert.equal(utils.areArrayContentsEqual(contents.allPaths, getFullPaths(data.fileNames.concat(data.dirNames))), true);
@@ -63,5 +61,7 @@ describe('setting up testing environment', function() {
 
     after(function() {
         rmdir.sync(testRoot);
+         delete require.cache[require.resolve('./../../core/alphabetDirectories.js')];
+        delete require.cache[require.resolve("./../../core/pathGatherer.js")];
     });
 })
