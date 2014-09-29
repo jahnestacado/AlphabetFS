@@ -8,7 +8,7 @@ function getAlphabet() {
     return alphabet;
 }
 
-function getAlphabetFsStructure(){
+function getAlphabetFsStructure() {
     return getAlphabet().concat([otherFolder]);
 }
 
@@ -24,15 +24,17 @@ function initiateStructure(targetDir, content, onDone) {
                             console.log("Error occured: " + error);
                         }
                         console.log("Folder Created " + letterPath);
-                        
+
                         createLetterDir(alphabetFsStructure.shift());
                     });
                 } else
                     createLetterDir(alphabetFsStructure.shift());
             });
         } else {
-            bus.core.emitMoveToAlphabetDirs({targetDir:targetDir, content:content});
-            onDone();
+            bus.core.emitMoveToAlphabetDirs(targetDir, content);
+            if (onDone && typeof (onDone) === "function") {
+                onDone();
+            }
         }
     }
     createLetterDir(alphabetFsStructure.shift());

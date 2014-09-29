@@ -6,7 +6,7 @@ var bus = require('hermes-bus');
 
 function registerDirectory(targetDirPath) {
     bus.db.emitStorePath(targetDirPath);
-    bus.socket.emitUIEvent({event: "register-path", path: targetDirPath});
+    bus.socket.emitUIEvent("register-path", targetDirPath);
     var watcher = hound.watch(targetDirPath);
     var fileUnderTransfer;
 
@@ -14,12 +14,12 @@ function registerDirectory(targetDirPath) {
         //Only move the parent dir
         if (file.split("/").length - 1 === targetDirPath.split("/").length) {
             fileUnderTransfer = file;
-            bus.socket.emitUIEvent({event: 'start-blinking', path: targetDirPath});
+            bus.socket.emitUIEvent("start-blinking", targetDirPath);
             snitch.onStopGrowing(file, function() {
                 var fileName = file.replace(targetDirPath + "/", "").trim();
-                bus.core.emitMoveToLetterDir({targetDir: targetDirPath, fileName: fileName});
+                bus.core.emitMoveToLetterDir(targetDirPath,fileName);
                 if (fileUnderTransfer === file) {
-                    bus.socket.emitUIEvent({event: 'stop-blinking', path: targetDirPath});
+                    bus.socket.emitUIEvent("stop-blinking", targetDirPath);
                 }
             });
         }

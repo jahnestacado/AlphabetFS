@@ -29,8 +29,8 @@ io.sockets.on('connection', function(socket) {
     });
 
 
-    bus.onEvent("socket", "UIEvent", function(data) {
-        socket.emit(data.event, data.path);
+    bus.onEvent("socket", "UIEvent", function(event, path) {
+        socket.emit(event,path);
     }).registerLocation(__filename);
 
 });
@@ -42,10 +42,8 @@ bus.onEvent('db', 'deletePath', function(path) {
 }).registerLocation(__filename);
 
 function init(socket) {
-    var action = {
-        bucket: "abc-fs",
-        key: "registered-paths",
-        cb: function(data) {
+   
+       function cb(data) {
             if (activeDirectories.length === 0) {
                 data.forEach(function(path) {
                     bus.core.emitActivateDirectory(path);
@@ -57,9 +55,9 @@ function init(socket) {
                 bus.socket.emitInitStatusOfBalls();
             }
         }
-    };
+   
 
-    bus.db.emitOnDataGet(action);
+    bus.db.emitOnDataGet("abc-fs","registered-paths",cb);
 }
 
 

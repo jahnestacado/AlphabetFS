@@ -2,23 +2,23 @@ var bus = require('hermes-bus');
 
 var pathsInBlinkingState = [];
 
-function handleBlinkingState(eventData) {
-    var index = pathsInBlinkingState.indexOf(eventData.path);
-    if (eventData.event === 'start-blinking' && index === -1) {
-        pathsInBlinkingState.push(eventData.path);
-    } else if (eventData.event === 'stop-blinking') {
+function handleBlinkingState(event, path) {
+    var index = pathsInBlinkingState.indexOf(path);
+    if (event === 'start-blinking' && index === -1) {
+        pathsInBlinkingState.push(path);
+    } else if (event === 'stop-blinking') {
         pathsInBlinkingState.splice(index, 1);
     }
 }
 
 function initStatusOfBalls() {
     pathsInBlinkingState.forEach(function(path) {
-        bus.socket.emitUIEvent({event: 'start-blinking', path: path});
+        bus.socket.emitUIEvent("start-blinking", path);
     });
 }
 
-bus.onEvent("socket", "UIEvent", function(data) {
-    handleBlinkingState(data);
+bus.onEvent("socket", "UIEvent", function(event, path) {
+    handleBlinkingState(event, path);
 }).registerLocation(__filename);
 
 bus.onEvent("socket", 'initStatusOfBalls', function() {

@@ -33,9 +33,9 @@ bus.onEvent("db", "deletePath", function(path) {
 }).registerLocation(__filename);
 
 
-bus.onEvent("db", "onDataGet", function(action) {
-    db.get(action.bucket, action.key, function(error, data) {
-        action.cb(data);
+bus.onEvent("db", "onDataGet", function(bucket, key, onDone) {
+    db.get(bucket, key, function(error, data) {
+        onDone(data);
     });
 });
 

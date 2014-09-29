@@ -4,23 +4,23 @@ var rmdir = require('rimraf');
 var dirTracker = require('./dirTracker');
 var bus = require('hermes-bus');
 
-bus.onEvent('core', 'moveToAlphabetDirs', function(data) {
-    var allPaths = data.content.allPaths;
+bus.onEvent('core', 'moveToAlphabetDirs', function(targetDir, content) {
+    var allPaths = content.allPaths;
     var handler = dirTracker.initialStateHandler();
     handler.numOfPaths = allPaths.length;
     if (handler.numOfPaths === 0) {
-        handler.requestDirRegistry(data.targetDir);
+        handler.requestDirRegistry(targetDir);
     }
     else {
         allPaths.map(function(path) {
             var name = path.split('/').pop();
-            moveToLetterDir(data.targetDir, name, handler);
+            moveToLetterDir(targetDir, name, handler);
         });
     }
 });
 
-bus.onEvent('core', 'moveToLetterDir', function(data) {
-    moveToLetterDir(data.targetDir, data.fileName, data.handler);
+bus.onEvent('core', 'moveToLetterDir', function(targetDir, fileName, handler) {
+    moveToLetterDir(targetDir, fileName, handler);
 });
 
 
