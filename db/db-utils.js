@@ -8,12 +8,14 @@ var pathsStoreObject = {
     initialValue: []
 };
 
-(function initializeFields() {
-    var fields = [pathsStoreObject];
-    fields.forEach(function(field) {
+var fields = [pathsStoreObject];
+
+//Initialize database fields
+function init(dbFields) {
+    dbFields.forEach(function(field) {
         createField(field.bucket, field.key, field.initialValue);
     });
-})();
+}
 
 bus.onEvent("db", "storePath", function(path) {
     db.get(pathsStoreObject.bucket, pathsStoreObject.key, function(error, registeredPaths) {
@@ -32,7 +34,6 @@ bus.onEvent("db", "deletePath", function(path) {
     });
 }).registerLocation(__filename);
 
-
 bus.onEvent("db", "onDataGet", function(bucket, key, onDone) {
     db.get(bucket, key, function(error, data) {
         onDone(data);
@@ -47,4 +48,4 @@ function createField(bucket, key, initialValue) {
     });
 }
 
-module.exports = db;
+init(fields);
