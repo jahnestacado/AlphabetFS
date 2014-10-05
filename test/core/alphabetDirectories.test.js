@@ -82,8 +82,7 @@ describe('#################### Starting integration tests for alphabetDirectorie
     after(function() {
         rmdir.sync(testingFolder);
         isAlphabetFSDirectoryStub.restore();
-        console.log("  #################### End of integration tests for alphabetDirectories module")
-
+        console.log("  ------------------------------ End of integration tests for alphabetDirectories module\n")
     });
 
 

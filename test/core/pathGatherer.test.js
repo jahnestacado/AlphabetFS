@@ -62,7 +62,7 @@ describe("#################### Start integration tests for pathGatherer module",
 
         after(function() {
             rmdir.sync(testRoot);
-            console.log("  #################### End of integration tests for pathGatherer module")
+            console.log("  ------------------------------ End of integration tests for pathGatherer module\n")
         });
     });
 });
