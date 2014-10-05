@@ -9,7 +9,7 @@
   "scripts": {
     "test": "mocha --reporter spec test/*/*.test.js"
   },
-   "dependencies": {
+  "dependencies": {
     "socket.io": "1.0.6",
     "hound": "1.0.4",
     "rimraf": "2.2.8",
@@ -17,12 +17,13 @@
     "snitch": "1.0.1",
     "riak-js": "0.10.2",
     "hermes-bus": "0.2.6",
-    "fs-extra": "0.12.0" 
+    "fs-extra": "0.12.0"
   },
   "devDependencies": {
     "mocha": "1.21.4",
-    "sinon": "1.10.3"
-  },	
+    "sinon": "1.10.3",
+    "x-poser": "^1.0.2"
+  },
   "repository": {
     "type": "git",
     "url": "https://github.com/jahnestacado/AlphabetFS"
