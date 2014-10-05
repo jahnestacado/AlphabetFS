@@ -7,10 +7,10 @@ function areArrayContentsEqual(a1, a2) {
             var index = a1.indexOf(element);
             areEqual = element === a2[index] && areEqual;
         });
-        return areEqual;
-    } else {
-        return areEqual;
     }
+    return areEqual;
 }
+
+
 
 exports.areArrayContentsEqual = areArrayContentsEqual;
