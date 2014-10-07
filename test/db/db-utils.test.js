@@ -6,8 +6,6 @@ var config = require('./../../db/db-config.js');
 var X = require('x-poser')
 var db = require('riak-js');
 
-
-
 describe("#################### Starting integration tests for db-utils module\n", function() {
 
     var dbGet = sinon.stub();
@@ -23,10 +21,9 @@ describe("#################### Starting integration tests for db-utils module\n"
     });
 
 
-
     describe("uppon 'manual' initialization", function() {
 
-    var dbUtils = X.require('./db/db-utils.js', 'auto');
+        var dbUtils = X.require('./db/db-utils.js', 'auto');
         var expectedField1 = {
             bucket: "dummy-bucket1",
             key: "dummy-key1",
@@ -55,7 +52,6 @@ describe("#################### Starting integration tests for db-utils module\n"
         it("should invoke db.exists twice", function() {
             assert(dbExists.calledTwice);
         });
-
 
         describe("on db.exists ", function() {
 
@@ -122,7 +118,6 @@ describe("#################### Starting integration tests for db-utils module\n"
             var expectedArg1 = pathsStoreObject.bucket;
             var expectedArg2 = pathsStoreObject.key;
             var expectedArg3 = sinon.spy();
-
 
             var args;
             before(function() {
@@ -231,7 +226,6 @@ describe("#################### Starting integration tests for db-utils module\n"
             });
         });
 
-
         describe("emit on db-busline 'storePath' event", function() {
 
             var testPath = "foo";
@@ -260,7 +254,6 @@ describe("#################### Starting integration tests for db-utils module\n"
                 it("should have for third argument a function", function() {
                     assert(typeof dbGetArgs[2] === "function");
                 });
-
 
                 describe("on storePath db.get callback invocation with path that already exists", function() {
                     var dummyPaths = [testPath, "bar", "baz"];
@@ -312,8 +305,8 @@ describe("#################### Starting integration tests for db-utils module\n"
                 });
             });
         });
-
     });
+
     after(function() {
         db.getClient.restore();
         console.log("  ------------------------------ End of integration tests for db-utils module\n")
