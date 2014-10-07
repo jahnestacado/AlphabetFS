@@ -1,19 +1,30 @@
 var assert = require('assert');
-var rmdir = require('rimraf');
 var fs = require('fs');
-var pathGatherer = require("./../../core/pathGatherer.js");
 var utils = require("./../utils.js");
+var sinon = require('sinon');
+var pathGatherer = require("./../../core/pathGatherer.js");
 
-describe("#################### Start integration tests for pathGatherer module", function() {
-    
+describe("#################### Starting integration tests for pathGatherer module\n", function() {
+    //Test data
+    var testRoot = "tester";
+    var fileNames = ["a1.txt", "d2.pdf", "jh.8", "787.ari"];
+    var dirNames = ["asd", "OJk", "KHTR", "GJyf"];
+    var abcDirs = ['A', 'B', 'C'];
+
     describe('setting up testing environment', function() {
-        var testRoot = "tester";
 
-        var data = {
-            fileNames: ["a1.txt", "d2.pdf", "jh.8", "787.ari"],
-            dirNames: ["asd", "OJk", "KHTR", "GJyf"],
-            abcDirs: ['A', 'B', 'C']
-        };
+        function stubLstat(lstatSyncStub, args, isFile) {
+            getFullPaths(args).forEach(function(path) {
+                lstatSyncStub.withArgs(path).returns({
+                    isFile: function() {
+                        return isFile;
+                    },
+                    isDirectory: function() {
+                        return !isFile;
+                    }
+                });
+            })
+        }
 
         function getFullPaths(names) {
             return names.map(function(name) {
@@ -21,26 +32,16 @@ describe("#################### Start integration tests for pathGatherer module",
             });
         }
 
-        function createTestDirs(dirNames) {
-            getFullPaths(dirNames).forEach(function(name) {
-                fs.mkdirSync(name);
-            });
-        }
-
-        function createTestFiles(fileNames) {
-            getFullPaths(fileNames).forEach(function(name) {
-                fs.openSync(name, 'w');
-            });
-        }
-
-        before(function() {
-            fs.mkdirSync(testRoot);
-            createTestFiles(data.fileNames);
-            createTestDirs(data.dirNames);
-            createTestDirs(data.abcDirs);
-        });
-
         describe('invoke getDirContent()', function() {
+            var sandbox = sinon.sandbox.create();
+
+            before(function() {
+                sandbox.stub(fs, 'readdirSync').withArgs(testRoot).returns(fileNames.concat(dirNames).concat(abcDirs));
+                var lstatSyncStub = sandbox.stub(fs, 'lstatSync');
+
+                stubLstat(lstatSyncStub, dirNames.concat(abcDirs), false);
+                stubLstat(lstatSyncStub, fileNames, true);
+            });
 
             var contents;
             before(function() {
@@ -48,21 +49,21 @@ describe("#################### Start integration tests for pathGatherer module",
             });
 
             it("should gather all file paths ", function() {
-                assert.equal(utils.areArrayContentsEqual(contents.filePaths, getFullPaths(data.fileNames)), true);
+                assert.equal(utils.areArrayContentsEqual(contents.filePaths, getFullPaths(fileNames)), true);
             });
 
             it("should gather all non-ABC-letter directory paths  ", function() {
-                assert.equal(utils.areArrayContentsEqual(contents.dirPaths, getFullPaths(data.dirNames)), true);
+                assert.equal(utils.areArrayContentsEqual(contents.dirPaths, getFullPaths(dirNames)), true);
             });
 
             it("should gather all paths ", function() {
-                assert.equal(utils.areArrayContentsEqual(contents.allPaths, getFullPaths(data.fileNames.concat(data.dirNames))), true);
+                assert.equal(utils.areArrayContentsEqual(contents.allPaths, getFullPaths(fileNames.concat(dirNames))), true);
+            });
+
+            after(function() {
+                sandbox.restore();
+                console.log("  ------------------------------ End of integration tests for pathGatherer module\n")
             });
         })
-
-        after(function() {
-            rmdir.sync(testRoot);
-            console.log("  ------------------------------ End of integration tests for pathGatherer module\n")
-        });
     });
 });
