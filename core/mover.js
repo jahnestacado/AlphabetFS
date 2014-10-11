@@ -57,9 +57,12 @@ function moveToLetterDir(targetDir, fileName, handler) {
 }
 
 function findDestDir(name) {
+    var destinationDir;
     var initialChar = name.charAt(0).toUpperCase();
     if (alphabetDirectories.isAlphabetLetter(initialChar)) {
-        return initialChar;
+        destinationDir = initialChar;
+    } else {
+        destinationDir = alphabetDirectories.otherFolder;
     }
-    return alphabetDirectories.otherFolder;
+    return destinationDir;
 }
