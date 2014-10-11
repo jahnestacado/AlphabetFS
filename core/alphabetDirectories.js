@@ -17,19 +17,11 @@ function initiateStructure(targetDir, content, onDone) {
     function createLetterDir(letter) {
         if (letter) {
             var letterPath = targetDir + '/' + letter;
-            fs.exists(letterPath, function(exists) {
-                if (!exists) {
-                    mkdirp(letterPath, function(error) {
-                        if (error) {
-                            console.log("Error occured: " + error);
-                        }
-                        console.log("Folder Created " + letterPath);
-
-                        createLetterDir(alphabetFsStructure.shift());
-                    });
-                } else
-                    createLetterDir(alphabetFsStructure.shift());
-            });
+            if (!fs.existsSync(letterPath)) {
+                mkdirp.sync(letterPath);
+                console.log("Folder Created " + letterPath);
+            }
+            createLetterDir(alphabetFsStructure.shift());
         } else {
             bus.core.emitMoveToAlphabetDirs(targetDir, content);
             if (onDone && typeof (onDone) === "function") {
@@ -41,17 +33,19 @@ function initiateStructure(targetDir, content, onDone) {
 }
 
 function isAlphabetLetter(name) {
-    if (getAlphabet().indexOf(name) === -1) {
-        return false;
+    var answer = false;
+    if (getAlphabet().indexOf(name) !== -1) {
+        answer = true;
     }
-    return true;
+    return answer;
 }
 
 function isAlphabetFSDirectory(name) {
+    var answer = false;
     if (isAlphabetLetter(name) || name === otherFolder) {
-        return true
+        answer = true
     }
-    return false;
+    return answer;
 }
 
 exports.initiateStructure = initiateStructure;
