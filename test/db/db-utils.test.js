@@ -7,23 +7,27 @@ var X = require('x-poser')
 var db = require('riak-js');
 
 describe("#################### Starting integration tests for db-utils module\n", function() {
-
-    var dbGet = sinon.stub();
-    var dbSave = sinon.stub();
-    var dbExists = sinon.stub();
-
-    sinon.stub(db, "getClient", function() {
-        return {
-            get: dbGet,
-            save: dbSave,
-            exists: dbExists
-        }
+    var sandbox = sinon.sandbox.create();
+    var dbGet;
+    var dbSave;
+    var dbExists;
+    var dbUtils;
+    
+    before('stubbing', function() {
+        dbGet = sandbox.stub();
+        dbSave = sandbox.stub();
+        dbExists = sandbox.stub();
+        sandbox.stub(db, "getClient", function() {
+            return {
+                get: dbGet,
+                save: dbSave,
+                exists: dbExists
+            }
+        });
+        dbUtils = X.require('./db/db-utils.js', 'auto');
     });
 
-
     describe("uppon 'manual' initialization", function() {
-
-        var dbUtils = X.require('./db/db-utils.js', 'auto');
         var expectedField1 = {
             bucket: "dummy-bucket1",
             key: "dummy-key1",
@@ -117,7 +121,7 @@ describe("#################### Starting integration tests for db-utils module\n"
         describe("emit on db-busline 'onDataGet' event", function() {
             var expectedArg1 = pathsStoreObject.bucket;
             var expectedArg2 = pathsStoreObject.key;
-            var expectedArg3 = sinon.spy();
+            var expectedArg3 = sandbox.spy();
 
             var args;
             before(function() {
@@ -308,7 +312,7 @@ describe("#################### Starting integration tests for db-utils module\n"
     });
 
     after(function() {
-        db.getClient.restore();
+        sandbox.restore();
         console.log("  ------------------------------ End of integration tests for db-utils module\n")
     });
 });
