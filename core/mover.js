@@ -1,12 +1,11 @@
 var fs = require('fs-extra');
 var alphabetDirectories = require('./alphabetDirectories');
 var rmdir = require('rimraf');
-var dirTracker = require('./dirTracker');
 var bus = require('hermes-bus');
 
 bus.onEvent('core', 'moveToAlphabetDirs', function(targetDir, content) {
     var allPaths = content.allPaths;
-    var handler = dirTracker.initialStateHandler();
+    var handler = initialStateHandler();
     handler.numOfPaths = allPaths.length;
     if (handler.numOfPaths === 0) {
         handler.requestDirRegistry(targetDir);
@@ -66,3 +65,19 @@ function findDestDir(name) {
     }
     return destinationDir;
 }
+
+function initialStateHandler() {
+    return {
+        counter: 0,
+        numOfPaths: 0,
+        requestDirRegistry: function(targetDirPath) {
+            this.counter++;
+            if (this.counter === this.numOfPaths || this.numOfPaths === 0) {
+                bus.core.emitRegisterDirectory(targetDirPath);
+                this.counter = 0;
+                this.numOfPaths = 0;
+            }
+        }
+    }
+}
+

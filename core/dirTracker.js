@@ -3,7 +3,6 @@ var snitch = require('snitch');
 var hound = require('hound');
 var bus = require('hermes-bus');
 
-
 function registerDirectory(targetDirPath) {
     bus.db.emitStorePath(targetDirPath);
     bus.socket.emitUIEvent("register-path", targetDirPath);
@@ -17,7 +16,7 @@ function registerDirectory(targetDirPath) {
             bus.socket.emitUIEvent("start-blinking", targetDirPath);
             snitch.onStopGrowing(file, function() {
                 var fileName = file.replace(targetDirPath + "/", "").trim();
-                bus.core.emitMoveToLetterDir(targetDirPath,fileName);
+                bus.core.emitMoveToLetterDir(targetDirPath, fileName);
                 if (fileUnderTransfer === file) {
                     bus.socket.emitUIEvent("stop-blinking", targetDirPath);
                 }
@@ -37,22 +36,10 @@ function registerDirectory(targetDirPath) {
 
 }
 
-function initialStateHandler() {
-    return {
-        counter: 0,
-        numOfPaths: 0,
-        requestDirRegistry: function(targetDirPath) {
-            this.counter++;
-            if (this.counter === this.numOfPaths || this.numOfPaths === 0) {
-                registerDirectory(targetDirPath);
-                this.counter = 0;
-                this.numOfPaths = 0;
-            }
-        }
-    }
-}
 
-exports.initialStateHandler = initialStateHandler;
+bus.onEvent('core', 'registerDirectory', function(targetDirPath) {
+    registerDirectory(targetDirPath);
+});
 
 
 
