@@ -1,24 +1,23 @@
 var assert = require('assert');
 var abcDirs = require('./../../core/alphabetDirectories.js');
 var sinon = require('sinon');
-var bus = require('hermes-bus');
 var fs = require('fs');
 var mkdirp = require('mkdirp');
+var bus = require('hermes-bus');
 
 describe('#################### Starting integration tests for alphabetDirectories module', function() {
-    
-    bus.subscribeEventsFrom('./core/mover.js');
-    var testingFolder = "testing-workspace";
     var sandbox = sinon.sandbox.create();
-    var abcDirTestingPaths = abcDirs.getAlphabetFsStructure().map(function(abcFsDir) {
-        return testingFolder + '/' + abcFsDir;
-    });
-
+    var testingFolder = "testing-workspace";
     var fsExistsStub;
     var mkdirpStub;
     var emitMoveToAlphabetDirsSpy;
 
+    abcDirTestingPaths = abcDirs.getAlphabetFsStructure().map(function(abcFsDir) {
+        return testingFolder + '/' + abcFsDir;
+    });
+
     before('stubbing relevant function', function() {
+        bus.subscribeEventsFrom('./core/mover.js');
         fsExistsStub = sandbox.stub(fs, 'existsSync');
         mkdirpStub = sandbox.stub(mkdirp, "sync");
         emitMoveToAlphabetDirsSpy = bus.core.emitMoveToAlphabetDirs = sandbox.spy();
@@ -78,6 +77,7 @@ describe('#################### Starting integration tests for alphabetDirectorie
 
     after(function() {
         sandbox.restore();
+        bus.core.destroy()
         console.log("  ------------------------------ End of integration tests for alphabetDirectories module\n")
     });
 });
