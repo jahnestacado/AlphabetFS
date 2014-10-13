@@ -11,6 +11,4 @@ function areArrayContentsEqual(a1, a2) {
     return areEqual;
 }
 
-
-
 exports.areArrayContentsEqual = areArrayContentsEqual;
