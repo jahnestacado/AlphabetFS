@@ -1,7 +1,13 @@
+var bus = require('hermes-bus');
 var fs = require('fs-extra');
 var alphabetDirectories = require('./alphabetDirectories');
 var rmdir = require('rimraf');
-var bus = require('hermes-bus');
+
+//TESTING MODE
+//It is created and exposed using the x-poser module only for testing purposes
+var self = {
+moveToLetterDir:moveToLetterDir,
+}
 
 bus.onEvent('core', 'moveToAlphabetDirs', function(targetDir, content) {
     var allPaths = content.allPaths;
@@ -13,15 +19,14 @@ bus.onEvent('core', 'moveToAlphabetDirs', function(targetDir, content) {
     else {
         allPaths.map(function(path) {
             var name = path.split('/').pop();
-            moveToLetterDir(targetDir, name, handler);
+            self.moveToLetterDir( targetDir, name, handler);
         });
     }
 });
 
-bus.onEvent('core', 'moveToLetterDir', function(targetDir, fileName, handler) {
-    moveToLetterDir(targetDir, fileName, handler);
+bus.onEvent('core', 'moveToLetterDir', function(targetDir, fileName) {
+    moveToLetterDir(targetDir, fileName);
 });
-
 
 function moveToLetterDir(targetDir, fileName, handler) {
     var originPath = targetDir + '/' + fileName;
@@ -81,3 +86,5 @@ function initialStateHandler() {
     }
 }
 
+
+        
