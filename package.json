@@ -16,7 +16,7 @@
     "mkdirp": "0.5.0",
     "snitch": "1.0.1",
     "riak-js": "0.10.2",
-    "hermes-bus": "0.2.6",
+    "hermes-bus": "0.3.0",
     "fs-extra": "0.12.0"
   },
   "devDependencies": {
