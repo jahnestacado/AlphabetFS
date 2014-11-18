@@ -126,7 +126,7 @@ describe("#################### Starting integration tests for db-utils module\n"
             var args;
             before(function() {
                 bus.db.emitOnDataGet(expectedArg1, expectedArg2, expectedArg3);
-                args = dbGet.args[ 0];
+                args = dbGet.args[0];
             });
 
             it("should invoke db.get once", function() {
