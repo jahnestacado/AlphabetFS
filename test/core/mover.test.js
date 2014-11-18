@@ -81,11 +81,89 @@ describe('#################### Starting integration tests for mover module', fun
 
     });
 
-    after(function() {
-        sandbox.restore();
-        bus.core.destroy();
-        console.log("  ------------------------------ End of integration tests for mover module\n")
+    describe('emit "MoveToLetterDir" bus.core event', function() {
+        var fs = require('fs-extra');
+        var rmdir = require('rimraf');
+        var lstatSyncStub;
+        var fsCopyStub;
+        var fsCopyCb;
+        var rmdirStub;
+        var fsRenameStub;
+        var filename = "filename";
+        var dirname = "dirname";
+        var targetDir = "targetDir";
+
+        //setting up stubs
+        before(function() {
+            lstatSyncStub = sandbox.stub(fs, 'lstatSync'), function() {
+                return {}
+            };
+            lstatSyncStub.withArgs(targetDir + '/' + filename).returns({isDirectory: function() {
+                    return false
+                }});
+            lstatSyncStub.withArgs(targetDir + '/' + dirname).returns({isDirectory: function() {
+                    return true
+                }});
+
+            fsCopyStub = sandbox.stub(fs, "copy");
+            rmdirStub = sandbox.stub(rmdir, "sync");
+            fsRenameStub = sandbox.stub(fs, "rename");
+        });
+
+
+        describe('for moving a file', function() {
+            
+            before(function() {
+                bus.core.emitMoveToLetterDir(targetDir, filename);
+            });
+
+            it("should invoke fsRenameStub once", function() {
+                assert(fsRenameStub.calledOnce);
+            });
+
+            it("should invokefsRenameStub with the right arguments ", function() {
+                assert(fsRenameStub.calledWith(targetDir + '/' + filename, targetDir + '/F/' + filename));
+            });
+
+        });
+
+        describe('for moving a directory', function() {
+            
+            before(function() {
+                bus.core.emitMoveToLetterDir(targetDir, dirname);
+            });
+
+            it("should invoke fsCopyStub once", function() {
+                assert(fsRenameStub.calledOnce);
+            });
+
+            it("should fsCopyStub with the right arguments ", function() {
+                assert(fsCopyStub.calledWith(targetDir + '/' + dirname, targetDir + '/D/' + dirname));
+            });
+
+            describe("invoke fsCopyStub callback", function() {
+
+                before(function() {
+                    fsCopyCb = fsCopyStub.args[0][2];
+                    fsCopyCb();
+                });
+
+                it("should invoke rmdirStub once", function() {
+                    assert(fsCopyStub.calledOnce);
+                });
+
+                it("should rmdirStub with the right arguments ", function() {
+                    assert(fsCopyStub.calledWith(targetDir + '/' + dirname));
+                });
+                
+            });
+        });
     });
 
+    after(function() {
+        sandbox.restore();
+        bus.hardReset();
+        console.log("  ------------------------------ End of integration tests for mover module\n")
+    });
 });
 

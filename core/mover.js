@@ -6,7 +6,7 @@ var rmdir = require('rimraf');
 //TESTING MODE
 //It is created and exposed using the x-poser module only for testing purposes
 var self = {
-moveToLetterDir:moveToLetterDir,
+    moveToLetterDir: moveToLetterDir,
 }
 
 bus.onEvent('core', 'moveToAlphabetDirs', function(targetDir, content) {
@@ -19,7 +19,7 @@ bus.onEvent('core', 'moveToAlphabetDirs', function(targetDir, content) {
     else {
         allPaths.map(function(path) {
             var name = path.split('/').pop();
-            self.moveToLetterDir( targetDir, name, handler);
+            self.moveToLetterDir(targetDir, name, handler);
         });
     }
 });
