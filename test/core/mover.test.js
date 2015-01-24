@@ -3,19 +3,25 @@ var sinon = require('sinon');
 var X = require('x-poser');
 var bus = require('hermes-bus');
 
-describe('#################### Starting integration tests for mover module', function() {
+describe("#################### Starting integration tests for 'mover' module", function() {
+   
     var sandbox = sinon.sandbox.create();
     var moveToLetterDirStub;
     var mover;
+    var emitRegisterDirectoryStub;
 
     before(function() {
         mover = X.require('./core/mover.js', 'auto');
         bus.subscribeEventsFrom('./core/dirTracker');
+    });
+
+    before(function() {
         moveToLetterDirStub = sandbox.stub(mover.self, 'moveToLetterDir');
-        bus.core.emitRegisterDirectory = sandbox.stub();
+        emitRegisterDirectoryStub = sandbox.stub(bus.core, "emitRegisterDirectory");
     });
 
     describe('register empty directory to AlphabetFs', function() {
+
         var targetDir = "test/target/dir";
         var content = {allPaths: []};
 
@@ -28,15 +34,15 @@ describe('#################### Starting integration tests for mover module', fun
         });
 
         it("should invoke  bus.core.emitRegisterDirectory once", function() {
-            assert(bus.core.emitRegisterDirectory.calledOnce);
+            assert(emitRegisterDirectoryStub.calledOnce);
         });
 
         it("should invoke  bus.core.emitRegisterDirectory with right argument", function() {
-            assert(bus.core.emitRegisterDirectory.calledWith(targetDir));
+            assert(emitRegisterDirectoryStub.calledWith(targetDir));
         });
 
         after(function() {
-            bus.core.emitRegisterDirectory.reset();
+            emitRegisterDirectoryStub.reset();
             moveToLetterDirStub.reset();
         });
 
@@ -112,7 +118,7 @@ describe('#################### Starting integration tests for mover module', fun
 
 
         describe('for moving a file', function() {
-            
+
             before(function() {
                 bus.core.emitMoveToLetterDir(targetDir, filename);
             });
@@ -128,7 +134,7 @@ describe('#################### Starting integration tests for mover module', fun
         });
 
         describe('for moving a directory', function() {
-            
+
             before(function() {
                 bus.core.emitMoveToLetterDir(targetDir, dirname);
             });
@@ -155,7 +161,7 @@ describe('#################### Starting integration tests for mover module', fun
                 it("should rmdirStub with the right arguments ", function() {
                     assert(fsCopyStub.calledWith(targetDir + '/' + dirname));
                 });
-                
+
             });
         });
     });
@@ -163,7 +169,8 @@ describe('#################### Starting integration tests for mover module', fun
     after(function() {
         sandbox.restore();
         bus.hardReset();
-        console.log("  ------------------------------ End of integration tests for mover module\n")
+        console.log("  ------------------------------ End of integration tests for 'mover' module\n")
     });
+    
 });
 

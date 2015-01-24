@@ -5,7 +5,7 @@ var fs = require('fs');
 var mkdirp = require('mkdirp');
 var bus = require('hermes-bus');
 
-describe('#################### Starting integration tests for alphabetDirectories module', function() {
+describe("#################### Starting integration tests for 'alphabetDirectories' module", function() {
     var sandbox = sinon.sandbox.create();
     var testingFolder = "testing-workspace";
     var fsExistsStub;
@@ -16,8 +16,11 @@ describe('#################### Starting integration tests for alphabetDirectorie
         return testingFolder + '/' + abcFsDir;
     });
 
-    before('stubbing relevant function', function() {
+     before("loading events",function() {
         bus.subscribeEventsFrom('./core/mover.js');
+     });
+
+    before("stubbing relevant function", function() {
         fsExistsStub = sandbox.stub(fs, 'existsSync');
         mkdirpStub = sandbox.stub(mkdirp, "sync");
         emitMoveToAlphabetDirsSpy = bus.core.emitMoveToAlphabetDirs = sandbox.spy();
@@ -28,14 +31,17 @@ describe('#################### Starting integration tests for alphabetDirectorie
 
     describe('invoke initiateStructure', function() {
         var content = {};
-
-        before(function(done) {
+        
+        before(function() {
             abcDirTestingPaths.forEach(function(element) {
                 fsExistsStub.withArgs(element)
                         .onCall(0).returns(false)
                         .onCall(1).returns(true);
                 mkdirpStub.withArgs(element).returns(true);
             });
+        });
+
+        before(function(done) {
             abcDirs.initiateStructure(testingFolder, content, done);
         });
 
@@ -77,7 +83,8 @@ describe('#################### Starting integration tests for alphabetDirectorie
 
     after(function() {
         sandbox.restore();
-        bus.core.destroy()
-        console.log("  ------------------------------ End of integration tests for alphabetDirectories module\n")
+        bus.hardReset();
+        console.log("  ------------------------------ End of integration tests for 'alphabetDirectories' module\n")
     });
+    
 });

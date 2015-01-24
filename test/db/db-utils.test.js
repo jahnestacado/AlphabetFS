@@ -6,7 +6,7 @@ var config = require('./../../db/db-config.js');
 var X = require('x-poser')
 var db = require('riak-js');
 
-describe("#################### Starting integration tests for db-utils module\n", function() {
+describe("#################### Starting integration tests for 'db-utils' module\n", function() {
     var sandbox = sinon.sandbox.create();
     var dbGet;
     var dbSave;
@@ -24,8 +24,11 @@ describe("#################### Starting integration tests for db-utils module\n"
                 exists: dbExists
             }
         });
-        dbUtils = X.require('./db/db-utils.js', 'auto');
     });
+    
+     before(function() {
+        dbUtils = X.require('./db/db-utils.js', 'auto');
+    });    
 
     describe("uppon 'manual' initialization", function() {
         var expectedField1 = {
@@ -108,7 +111,8 @@ describe("#################### Starting integration tests for db-utils module\n"
         after(function() {
             dbSave.reset();
             dbExists.reset();
-        })
+        });
+        
     });
 
     describe("testing bus events related to path entries in database", function() {
@@ -157,7 +161,8 @@ describe("#################### Starting integration tests for db-utils module\n"
             after(function() {
                 dbGet.reset();
                 dbSave.reset();
-            })
+            });
+            
         });
 
         describe("emit on db-busline 'deletePath' event", function() {
@@ -227,6 +232,7 @@ describe("#################### Starting integration tests for db-utils module\n"
                     dbGet.reset();
                     dbSave.reset();
                 });
+                
             });
         });
 
@@ -307,12 +313,15 @@ describe("#################### Starting integration tests for db-utils module\n"
                     dbGet.reset();
                     dbSave.reset();
                 });
+                
             });
         });
     });
 
     after(function() {
         sandbox.restore();
-        console.log("  ------------------------------ End of integration tests for db-utils module\n")
+        bus.hardReset();
+        console.log("  ------------------------------ End of integration tests for 'db-utils' module\n")
     });
+    
 });
