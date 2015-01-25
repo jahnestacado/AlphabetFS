@@ -7,20 +7,22 @@ function registerDirectory(targetDirPath) {
     bus.db.emitStorePath(targetDirPath);
     bus.socket.emitUIEvent("register-path", targetDirPath);
     var watcher = hound.watch(targetDirPath);
-    var fileUnderTransfer;
+    var artifactUnderTransfer;
 
-    watcher.on('create', function(file, stats) {
-        //Only move the parent dir
-        if (file.split("/").length - 1 === targetDirPath.split("/").length) {
-            fileUnderTransfer = file;
+    watcher.on('create', function(fsArtifact) {
+        //Only move a direct child folder of the registered directory
+        if (isDirectChildArtifact(targetDirPath, fsArtifact)) {
+            artifactUnderTransfer = fsArtifact;
             bus.socket.emitUIEvent("start-blinking", targetDirPath);
-            snitch.onStopGrowing(file, function() {
-                var fileName = file.replace(targetDirPath + "/", "").trim();
-                bus.core.emitMoveToLetterDir(targetDirPath, fileName);
-                if (fileUnderTransfer === file) {
+            
+            snitch.onStopGrowing(fsArtifact, function() {
+                var artifactName = fsArtifact.replace(targetDirPath + "/", "").trim();
+                bus.core.emitMoveToLetterDir(targetDirPath, artifactName);
+                if (artifactUnderTransfer === fsArtifact) {
                     bus.socket.emitUIEvent("stop-blinking", targetDirPath);
                 }
             });
+            
         }
     });
 
@@ -34,6 +36,10 @@ function registerDirectory(targetDirPath) {
         }
     }).registerLocation(__filename);
 
+}
+
+function isDirectChildArtifact(targetDirPath, fsArtifact) {
+    return fsArtifact.split("/").length - 1 === targetDirPath.split("/").length;
 }
 
 
