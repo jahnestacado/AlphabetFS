@@ -6,18 +6,19 @@ var bus = require('hermes-bus');
 describe("#################### Starting integration tests for 'mover' module", function() {
    
     var sandbox = sinon.sandbox.create();
+    var dummyFunction = function() {};
     var moveToLetterDirStub;
     var mover;
-    var emitRegisterDirectoryStub;
+    var emitRegisterDirectorySpy;
 
     before(function() {
         mover = X.require('./core/mover.js', 'auto');
-        bus.subscribeEventsFrom('./core/dirTracker');
+        bus.onEvent('core', 'registerDirectory', dummyFunction);
     });
 
     before(function() {
         moveToLetterDirStub = sandbox.stub(mover.self, 'moveToLetterDir');
-        emitRegisterDirectoryStub = sandbox.stub(bus.core, "emitRegisterDirectory");
+        emitRegisterDirectorySpy = sandbox.spy(bus.core, "emitRegisterDirectory");
     });
 
     describe('register empty directory to AlphabetFs', function() {
@@ -26,6 +27,7 @@ describe("#################### Starting integration tests for 'mover' module", f
         var content = {allPaths: []};
 
         before(function() {
+            emitRegisterDirectorySpy.withArgs(targetDir)
             bus.core.emitMoveToAlphabetDirs(targetDir, content);
         });
 
@@ -33,16 +35,12 @@ describe("#################### Starting integration tests for 'mover' module", f
             assert.equal(moveToLetterDirStub.called, false);
         });
 
-        it("should invoke  bus.core.emitRegisterDirectory once", function() {
-            assert(emitRegisterDirectoryStub.calledOnce);
-        });
-
-        it("should invoke  bus.core.emitRegisterDirectory with right argument", function() {
-            assert(emitRegisterDirectoryStub.calledWith(targetDir));
+        it("should invoke  'bus.core.emitRegisterDirectory' once and with right argument", function() {
+            assert(emitRegisterDirectorySpy.withArgs(targetDir).calledOnce);
         });
 
         after(function() {
-            emitRegisterDirectoryStub.reset();
+            emitRegisterDirectorySpy.reset();
             moveToLetterDirStub.reset();
         });
 
@@ -105,10 +103,10 @@ describe("#################### Starting integration tests for 'mover' module", f
                 return {}
             };
             lstatSyncStub.withArgs(targetDir + '/' + filename).returns({isDirectory: function() {
-                    return false
+                    return false;
                 }});
             lstatSyncStub.withArgs(targetDir + '/' + dirname).returns({isDirectory: function() {
-                    return true
+                    return true;
                 }});
 
             fsCopyStub = sandbox.stub(fs, "copy");
@@ -173,4 +171,3 @@ describe("#################### Starting integration tests for 'mover' module", f
     });
     
 });
-
