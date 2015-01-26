@@ -49,21 +49,21 @@ describe("#################### Starting integration tests for pathGatherer modul
             });
 
             it("should gather all file paths ", function() {
-                assert.equal(utils.areArrayContentsEqual(contents.filePaths, getFullPaths(fileNames)), true);
+                assert(utils.areArrayContentsEqual(contents.filePaths, getFullPaths(fileNames)));
             });
 
             it("should gather all non-ABC-letter directory paths  ", function() {
-                assert.equal(utils.areArrayContentsEqual(contents.dirPaths, getFullPaths(dirNames)), true);
+                assert(utils.areArrayContentsEqual(contents.dirPaths, getFullPaths(dirNames)));
             });
 
             it("should gather all paths ", function() {
-                assert.equal(utils.areArrayContentsEqual(contents.allPaths, getFullPaths(fileNames.concat(dirNames))), true);
+                assert(utils.areArrayContentsEqual(contents.allPaths, getFullPaths(fileNames.concat(dirNames))));
             });
 
             after(function() {
                 sandbox.restore();
                 console.log("  ------------------------------ End of integration tests for pathGatherer module\n")
             });
-        })
+        });
     });
 });
