@@ -9,7 +9,9 @@ describe("'#################### Starting integration tests for 'statusBallBlinkH
 
     before(function() {
         statusBallBlinkHandler = require('./../../core/statusBallBlinkHandler.js');
+    });
 
+    before(function() {
         sandbox = sinon.sandbox.create();
         socketEmitUIEventSpy = sandbox.spy(bus.socket, "emitUIEvent");
     });
@@ -19,21 +21,22 @@ describe("'#################### Starting integration tests for 'statusBallBlinkH
         var path = "dummy/path"
         describe("when emitting 'start-blinking' and 'initStatusOfBalls' messages for a path", function() {
 
+            //Adding path in 'pathsInBlinkingState' array
             before(function() {
                 bus.socket.emitUIEvent("start-blinking", path);
             });
-
+           
             before(function() {
                 socketEmitUIEventSpy.reset();
+                socketEmitUIEventSpy.withArgs("start-blinking", path);
+            });
+
+            before(function() {
                 bus.socket.emitInitStatusOfBalls();
             });
 
-            it("should invoke 'socketEmitUIEvent' once", function() {
-                assert(socketEmitUIEventSpy.calledOnce);
-            });
-
-            it("should invoke 'socketEmitUIEvent' with the right arguments", function() {
-                assert(socketEmitUIEventSpy.calledWith("start-blinking", path));
+            it("should invoke 'socketEmitUIEvent' once with the right arguments", function() {
+                assert(socketEmitUIEventSpy.withArgs("start-blinking", path).calledOnce);
             });
 
             describe("when emitting 'stop-blinking' and 'initStatusOfBalls' messages for the same path", function() {
@@ -41,21 +44,21 @@ describe("'#################### Starting integration tests for 'statusBallBlinkH
                 before(function() {
                     bus.socket.emitUIEvent("start-blinking", path);
                 });
-
+                
                 before(function() {
                     socketEmitUIEventSpy.reset();
+                    socketEmitUIEventSpy.withArgs("start-blinking", path);
+                });
+
+                before(function() {
                     bus.socket.emitInitStatusOfBalls();
                 });
 
-                it("should invoke 'socketEmitUIEvent' only  once again", function() {
-                    assert(socketEmitUIEventSpy.calledOnce);
+                it("should invoke 'socketEmitUIEvent'only once again with the right arguments", function() {
+                    assert(socketEmitUIEventSpy.withArgs("start-blinking", path).calledOnce);
                 });
 
-                it("should invoke 'socketEmitUIEvent' with the same arguments again", function() {
-                    assert(socketEmitUIEventSpy.calledWith("start-blinking", path));
-                });
-
-            })
+            });
 
             describe("when emitting 'stop-blinking' and 'initStatusOfBalls' messages for the path", function() {
 
@@ -73,14 +76,13 @@ describe("'#################### Starting integration tests for 'statusBallBlinkH
                     assert(socketEmitUIEventSpy.calledOnce)
                 });
 
-
-            })
-        })
+            });
+        });
 
         after(function() {
             socketEmitUIEventSpy.reset();
         });
-    })
+    });
 
     describe("setting a path in a blinking state", function() {
         var path = "foo/bar";
@@ -107,13 +109,13 @@ describe("'#################### Starting integration tests for 'statusBallBlinkH
 
             });
 
-        })
+        });
 
         after(function() {
             socketEmitUIEventSpy.reset();
         });
 
-    })
+    });
 
     after(function() {
         sandbox.restore();
