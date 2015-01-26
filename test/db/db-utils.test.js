@@ -8,20 +8,20 @@ var db = require('riak-js');
 
 describe("#################### Starting integration tests for 'db-utils' module\n", function() {
     var sandbox = sinon.sandbox.create();
-    var dbGet;
-    var dbSave;
-    var dbExists;
+    var dbGetStub;
+    var dbSaveStub;
+    var dbExistsStub;
     var dbUtils;
     
     before('stubbing', function() {
-        dbGet = sandbox.stub();
-        dbSave = sandbox.stub();
-        dbExists = sandbox.stub();
+        dbGetStub = sandbox.stub();
+        dbSaveStub = sandbox.stub();
+        dbExistsStub = sandbox.stub();
         sandbox.stub(db, "getClient", function() {
             return {
-                get: dbGet,
-                save: dbSave,
-                exists: dbExists
+                get: dbGetStub,
+                save: dbSaveStub,
+                exists: dbExistsStub
             }
         });
     });
@@ -51,13 +51,13 @@ describe("#################### Starting integration tests for 'db-utils' module\
          * and test it with alternative db-fields
          */
         before(function() {
-            dbSave.reset();
-            dbExists.reset();
+            dbSaveStub.reset();
+            dbExistsStub.reset();
             dbUtils.init(fields);
         });
 
         it("should invoke db.exists twice", function() {
-            assert(dbExists.calledTwice);
+            assert(dbExistsStub.calledTwice);
         });
 
         describe("on db.exists ", function() {
@@ -65,16 +65,16 @@ describe("#################### Starting integration tests for 'db-utils' module\
             var dbExistsCallback;
             before(function() {
                 // Capturing dbExists callback of first invocation
-                dbExistsCallback = dbExists.args[0][2];
+                dbExistsCallback = dbExistsStub.args[0][2];
             });
 
             it("should have been invoked with arguments '" + expectedField1.bucket + ", " + expectedField1.key + "'", function() {
-                assert(dbExists.calledWith(expectedField1.bucket, expectedField1.key));
+                assert(dbExistsStub.calledWith(expectedField1.bucket, expectedField1.key));
 
             });
 
             it("should have been invoked with arguments '" + expectedField2.bucket + ", " + expectedField2.key + "'", function() {
-                assert(dbExists.calledWith(expectedField2.bucket, expectedField2.key));
+                assert(dbExistsStub.calledWith(expectedField2.bucket, expectedField2.key));
 
             });
 
@@ -85,7 +85,7 @@ describe("#################### Starting integration tests for 'db-utils' module\
                 });
 
                 it("should have not invoked db.save", function() {
-                    assert.equal(dbSave.called, false);
+                    assert.equal(dbSaveStub.called, false);
                 });
 
             });
@@ -97,11 +97,11 @@ describe("#################### Starting integration tests for 'db-utils' module\
                 });
 
                 it("should have  invoked db.save once", function() {
-                    assert(dbSave.calledOnce);
+                    assert(dbSaveStub.calledOnce);
                 });
 
                 it("should have bee  invoked with the right arguments", function() {
-                    assert(dbSave.calledWithExactly(expectedField1.bucket, expectedField1.key, expectedField1.initialValue));
+                    assert(dbSaveStub.calledWithExactly(expectedField1.bucket, expectedField1.key, expectedField1.initialValue));
                 });
 
             });
@@ -109,8 +109,8 @@ describe("#################### Starting integration tests for 'db-utils' module\
         });
 
         after(function() {
-            dbSave.reset();
-            dbExists.reset();
+            dbSaveStub.reset();
+            dbExistsStub.reset();
         });
         
     });
@@ -130,11 +130,11 @@ describe("#################### Starting integration tests for 'db-utils' module\
             var args;
             before(function() {
                 bus.db.emitOnDataGet(expectedArg1, expectedArg2, expectedArg3);
-                args = dbGet.args[0];
+                args = dbGetStub.args[0];
             });
 
             it("should invoke db.get once", function() {
-                assert(dbGet.calledOnce);
+                assert(dbGetStub.calledOnce);
             });
 
             it("should have for first argument a string with value equal to '" + expectedArg1 + "'", function() {
@@ -148,7 +148,7 @@ describe("#################### Starting integration tests for 'db-utils' module\
             describe("onDataGetCallback", function() {
 
                 before(function() {
-                    var onDataGetCallback = dbGet.args[0][2];
+                    var onDataGetCallback = dbGetStub.args[0][2];
                     onDataGetCallback();
                 });
 
@@ -159,8 +159,8 @@ describe("#################### Starting integration tests for 'db-utils' module\
             });
 
             after(function() {
-                dbGet.reset();
-                dbSave.reset();
+                dbGetStub.reset();
+                dbSaveStub.reset();
             });
             
         });
@@ -176,18 +176,18 @@ describe("#################### Starting integration tests for 'db-utils' module\
             });
 
             it("should invoke db.get once", function() {
-                assert(dbGet.calledOnce);
+                assert(dbGetStub.calledOnce);
             });
 
             describe("db.get", function() {
 
                 var dbGetArgs;
                 before(function() {
-                    dbGetArgs = dbGet.args[0];
+                    dbGetArgs = dbGetStub.args[0];
                 });
 
                 it("should have been invoked with  '" + expectedArg1 + ", " + expectedArg2 + "", function() {
-                    assert(dbGet.calledWith(expectedArg1, expectedArg2));
+                    assert(dbGetStub.calledWith(expectedArg1, expectedArg2));
                 });
 
                 it("should have for third argument a function", function() {
@@ -204,14 +204,14 @@ describe("#################### Starting integration tests for 'db-utils' module\
                     });
 
                     it("should invoke db.save once", function() {
-                        assert(dbSave.calledOnce);
+                        assert(dbSaveStub.calledOnce);
                     });
 
                     describe("on db.save ", function() {
                         var args;
                         var expectedArg3 = ["bar", "baz"];
                         before(function() {
-                            args = dbSave.args[0];
+                            args = dbSaveStub.args[0];
                         });
 
                         it("should have for first argument a string with value equal to '" + expectedArg1 + "'", function() {
@@ -229,8 +229,8 @@ describe("#################### Starting integration tests for 'db-utils' module\
                 });
 
                 after(function() {
-                    dbGet.reset();
-                    dbSave.reset();
+                    dbGetStub.reset();
+                    dbSaveStub.reset();
                 });
                 
             });
@@ -247,18 +247,18 @@ describe("#################### Starting integration tests for 'db-utils' module\
             });
 
             it("should invoke db.get once", function() {
-                assert(dbGet.calledOnce);
+                assert(dbGetStub.calledOnce);
             });
 
             describe("db.get", function() {
 
                 var dbGetArgs;
                 before(function() {
-                    dbGetArgs = dbGet.args[0];
+                    dbGetArgs = dbGetStub.args[0];
                 });
 
                 it("should have been invoked with  '" + expectedArg1 + ", " + expectedArg2 + "", function() {
-                    assert(dbGet.calledWith(expectedArg1, expectedArg2));
+                    assert(dbGetStub.calledWith(expectedArg1, expectedArg2));
                 });
 
                 it("should have for third argument a function", function() {
@@ -274,7 +274,7 @@ describe("#################### Starting integration tests for 'db-utils' module\
                     });
 
                     it("should not invoke db.save", function() {
-                        assert.equal(dbSave.called, false);
+                        assert.equal(dbSaveStub.called, false);
                     });
 
                     describe("on storePath db.get callback invocation with path that doesn't exist", function() {
@@ -285,14 +285,14 @@ describe("#################### Starting integration tests for 'db-utils' module\
                         });
 
                         it("should invoke db.save once", function() {
-                            assert(dbSave.calledOnce);
+                            assert(dbSaveStub.calledOnce);
                         });
 
                         describe("on db.save ", function() {
                             var cbArgs;
                             var expectedArg3 = ["bar", "baz", testPath];
                             before(function() {
-                                cbArgs = dbSave.args[0];
+                                cbArgs = dbSaveStub.args[0];
                             });
 
                             it("should have for first argument a string with value equal to '" + expectedArg1 + "'", function() {
@@ -303,15 +303,15 @@ describe("#################### Starting integration tests for 'db-utils' module\
                                 assert.equal(cbArgs[1], expectedArg2);
                             });
                             it("should have for third argument an array with value equal to '" + expectedArg3 + "'", function() {
-                                assert.equal(utils.areArrayContentsEqual(cbArgs[2], expectedArg3), true);
+                                assert(utils.areArrayContentsEqual(cbArgs[2], expectedArg3));
                             });
                         });
                     });
                 });
 
                 after(function() {
-                    dbGet.reset();
-                    dbSave.reset();
+                    dbGetStub.reset();
+                    dbSaveStub.reset();
                 });
                 
             });
