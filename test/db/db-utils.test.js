@@ -1,8 +1,8 @@
 var assert = require('assert');
 var sinon = require('sinon');
-var utils = require("./../utils.js");
+var testUtils = require("./../test-utils.js");
 var bus = require('hermes-bus');
-var config = require('./../../db/db-config.js');
+var config = require('./../../config/db/riak-config.js');
 var X = require('x-poser')
 var db = require('riak-js');
 
@@ -27,7 +27,7 @@ describe("#################### Starting integration tests for 'db-utils' module\
     });
     
      before(function() {
-        dbUtils = X.require('./db/db-utils.js', 'auto');
+        dbUtils = X.require('./src/db/db-utils.js', 'auto');
     });    
 
     describe("uppon 'manual' initialization", function() {
@@ -223,7 +223,7 @@ describe("#################### Starting integration tests for 'db-utils' module\
                         });
 
                         it("should have for third argument an array with value equal to '" + expectedArg3 + "'", function() {
-                            assert.equal(utils.areArrayContentsEqual(args[2], expectedArg3), true);
+                            assert.equal(testUtils.areArrayContentsEqual(args[2], expectedArg3), true);
                         });
                     });
                 });
@@ -303,7 +303,7 @@ describe("#################### Starting integration tests for 'db-utils' module\
                                 assert.equal(cbArgs[1], expectedArg2);
                             });
                             it("should have for third argument an array with value equal to '" + expectedArg3 + "'", function() {
-                                assert(utils.areArrayContentsEqual(cbArgs[2], expectedArg3));
+                                assert(testUtils.areArrayContentsEqual(cbArgs[2], expectedArg3));
                             });
                         });
                     });

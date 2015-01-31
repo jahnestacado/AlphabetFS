@@ -9,7 +9,7 @@ describe("#################### Starting integration tests for 'dirTracker' modul
     var targetDirPath1 = "foo/bar";
 
     before(function() {
-        bus.subscribeEventsFrom("./core/dirTracker.js");
+        bus.subscribeEventsFrom("./src/core/dirTracker.js");
         bus.onEvent("socket", "UIEvent", dummyFunction);
         bus.onEvent("db", "storePath", dummyFunction);
     });

@@ -7,8 +7,8 @@ var bus = require('hermes-bus');
 server.listen(8085);
 
 var activeDirectories = [];
-app.use(express.static(__dirname + '/../public/css'));
-app.use(express.static(__dirname + '/../public'));
+app.use(express.static(__dirname + '/../../public/css'));
+app.use(express.static(__dirname + '/../../public'));
 
 
 

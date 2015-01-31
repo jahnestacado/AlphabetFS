@@ -1,8 +1,8 @@
 var assert = require('assert');
 var fs = require('fs');
-var utils = require("./../utils.js");
+var testUtils = require("./../test-utils.js");
 var sinon = require('sinon');
-var pathGatherer = require("./../../core/pathGatherer.js");
+var pathGatherer = require("./../../src/core/pathGatherer.js");
 
 describe("#################### Starting integration tests for pathGatherer module\n", function() {
     //Test data
@@ -49,15 +49,15 @@ describe("#################### Starting integration tests for pathGatherer modul
             });
 
             it("should gather all file paths ", function() {
-                assert(utils.areArrayContentsEqual(contents.filePaths, getFullPaths(fileNames)));
+                assert(testUtils.areArrayContentsEqual(contents.filePaths, getFullPaths(fileNames)));
             });
 
             it("should gather all non-ABC-letter directory paths  ", function() {
-                assert(utils.areArrayContentsEqual(contents.dirPaths, getFullPaths(dirNames)));
+                assert(testUtils.areArrayContentsEqual(contents.dirPaths, getFullPaths(dirNames)));
             });
 
             it("should gather all paths ", function() {
-                assert(utils.areArrayContentsEqual(contents.allPaths, getFullPaths(fileNames.concat(dirNames))));
+                assert(testUtils.areArrayContentsEqual(contents.allPaths, getFullPaths(fileNames.concat(dirNames))));
             });
 
             after(function() {

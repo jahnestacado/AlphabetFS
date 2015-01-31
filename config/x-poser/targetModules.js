@@ -1,11 +1,11 @@
 var targetModules = [
     {
-        path: './db/db-utils.js',
+        path: './src/db/db-utils.js',
         exposes: {
             init: 'init'
         }},
      {
-        path: './core/mover.js',
+        path: './src/core/mover.js',
         exposes: {
             self: 'self'
         }},

@@ -12,7 +12,7 @@ describe("#################### Starting integration tests for 'mover' module", f
     var emitRegisterDirectorySpy;
 
     before(function() {
-        mover = X.require('./core/mover.js', 'auto');
+        mover = X.require('./src/core/mover.js', 'auto');
         bus.onEvent('core', 'registerDirectory', dummyFunction);
     });
 

@@ -8,7 +8,7 @@ describe("'#################### Starting integration tests for 'statusBallBlinkH
     var sandbox;
 
     before(function() {
-        statusBallBlinkHandler = require('./../../core/statusBallBlinkHandler.js');
+        statusBallBlinkHandler = require('./../../src/core/statusBallBlinkHandler.js');
     });
 
     before(function() {

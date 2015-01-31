@@ -1,5 +1,5 @@
 var assert = require('assert');
-var abcDirs = require('./../../core/alphabetDirectories.js');
+var abcDirs = require('./../../src/core/alphabetDirectories.js');
 var sinon = require('sinon');
 var fs = require('fs');
 var mkdirp = require('mkdirp');
@@ -17,7 +17,7 @@ describe("#################### Starting integration tests for 'alphabetDirectori
     });
 
      before("loading events",function() {
-        bus.subscribeEventsFrom('./core/mover.js');
+        bus.subscribeEventsFrom('./src/core/mover.js');
      });
 
     before("stubbing relevant function", function() {

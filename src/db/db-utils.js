@@ -1,4 +1,4 @@
-var config = require('./db-config.js');
+var config = require('./../../config/db/riak-config.js');
 var bus = require('hermes-bus');
 var db = require('riak-js').getClient({host: config.host, port: config.port});
 
