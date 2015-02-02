@@ -1,7 +1,7 @@
 var bus = require('hermes-bus');
 
 bus.subscribeEventsFrom(
-        './src/core/statusBallBlinkHandler.js',
+        './src/core/state-handler.js',
         './src/db/db-utils.js',
         './src/core/dirTracker',
         './src/core/archiver.js',
