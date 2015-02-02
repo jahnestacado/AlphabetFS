@@ -1,6 +1,6 @@
 var bus = require('hermes-bus');
 var fs = require('fs-extra');
-var alphabetDirectories = require('./alphabetDirectories');
+var alphabetfsUtils = require('./alphabetfs-utils.js');
 var rmdir = require('rimraf');
 
 //TESTING MODE
@@ -63,10 +63,10 @@ function moveToLetterDir(targetDir, fileName, handler) {
 function findDestDir(name) {
     var destinationDir;
     var initialChar = name.charAt(0).toUpperCase();
-    if (alphabetDirectories.isAlphabetLetter(initialChar)) {
+    if (alphabetfsUtils.isAlphabetLetter(initialChar)) {
         destinationDir = initialChar;
     } else {
-        destinationDir = alphabetDirectories.otherFolder;
+        destinationDir = alphabetfsUtils.otherFolder;
     }
     return destinationDir;
 }

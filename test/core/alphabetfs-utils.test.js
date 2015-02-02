@@ -1,18 +1,18 @@
 var assert = require('assert');
-var abcDirs = require('./../../src/core/alphabetDirectories.js');
+var alphabetfsUtils = require('./../../src/core/alphabetfs-utils.js');
 var sinon = require('sinon');
 var fs = require('fs');
 var mkdirp = require('mkdirp');
 var bus = require('hermes-bus');
 
-describe("#################### Starting integration tests for 'alphabetDirectories' module", function() {
+describe("#################### Starting integration tests for 'alphabetfs-utils' module", function() {
     var sandbox = sinon.sandbox.create();
     var testingFolder = "testing-workspace";
     var fsExistsStub;
     var mkdirpStub;
     var emitMoveToAlphabetDirsSpy;
 
-    abcDirTestingPaths = abcDirs.getAlphabetFsStructure().map(function(abcFsDir) {
+    abcDirTestingPaths = alphabetfsUtils.getAlphabetFsStructure().map(function(abcFsDir) {
         return testingFolder + '/' + abcFsDir;
     });
 
@@ -24,7 +24,7 @@ describe("#################### Starting integration tests for 'alphabetDirectori
         fsExistsStub = sandbox.stub(fs, 'existsSync');
         mkdirpStub = sandbox.stub(mkdirp, "sync");
         emitMoveToAlphabetDirsSpy = bus.core.emitMoveToAlphabetDirs = sandbox.spy();
-        sandbox.stub(abcDirs, 'isAlphabetFSDirectory', function() {
+        sandbox.stub(alphabetfsUtils, 'isAlphabetFSDirectory', function() {
             return false;
         });
     });
@@ -42,7 +42,7 @@ describe("#################### Starting integration tests for 'alphabetDirectori
         });
 
         before(function(done) {
-            abcDirs.initiateStructure(testingFolder, content, done);
+            alphabetfsUtils.initiateStructure(testingFolder, content, done);
         });
 
         abcDirTestingPaths.forEach(function(element) {
@@ -62,7 +62,7 @@ describe("#################### Starting integration tests for 'alphabetDirectori
         describe('invoke again initiateStructure while abcStructure is already created', function() {
 
             before(function(done) {
-                abcDirs.initiateStructure(testingFolder, content, done);
+                alphabetfsUtils.initiateStructure(testingFolder, content, done);
             });
 
             it('should not invoke mkdirp again', function() {
@@ -84,7 +84,7 @@ describe("#################### Starting integration tests for 'alphabetDirectori
     after(function() {
         sandbox.restore();
         bus.hardReset();
-        console.log("  ------------------------------ End of integration tests for 'alphabetDirectories' module\n")
+        console.log("  ------------------------------ End of integration tests for 'alphabetfs-utils' module\n")
     });
     
 });

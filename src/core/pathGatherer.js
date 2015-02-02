@@ -1,5 +1,5 @@
 var fs = require('fs');
-var alphabetDirectories = require('./alphabetDirectories');
+var alphabetfsUtils = require('./alphabetfs-utils.js');
 
 function getDirContent(targetDirPath) {
     var filePaths = [];
@@ -15,7 +15,7 @@ function getDirContent(targetDirPath) {
         filePaths: filePaths,
         dirPaths: dirPaths,
         allPaths: filePaths.concat(dirPaths)
-    }
+    };
 
     return contentHolder;
 }
@@ -23,7 +23,7 @@ function getDirContent(targetDirPath) {
 
 function dirOrFileHandler(path, dirPaths, filePaths) {
     var name = path.split('/').pop();
-    if (fs.lstatSync(path).isDirectory() && !alphabetDirectories.isAlphabetFSDirectory(name)) {
+    if (fs.lstatSync(path).isDirectory() && !alphabetfsUtils.isAlphabetFSDirectory(name)) {
         dirPaths.push(path);
     }
     else if (fs.lstatSync(path).isFile()) {
