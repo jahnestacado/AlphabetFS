@@ -1,7 +1,13 @@
 var fs = require('fs');
+var pathCollector = require('./path-collector.js');
 var mkdirp = require('mkdirp');
 var bus = require('hermes-bus');
 var otherFolder = "#$%123";
+
+bus.onEvent("core", "activateDirectory", function(targetDirPath) {
+    var content = pathCollector.getDirContent(targetDirPath);
+    initiateStructure(targetDirPath, content);
+});
 
 function getAlphabet() {
     var alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
@@ -43,7 +49,7 @@ function isAlphabetLetter(name) {
 function isAlphabetFSDirectory(name) {
     var answer = false;
     if (isAlphabetLetter(name) || name === otherFolder) {
-        answer = true
+        answer = true;
     }
     return answer;
 }

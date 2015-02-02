@@ -5,6 +5,6 @@ bus.subscribeEventsFrom(
         './src/db/db-utils.js',
         './src/core/dirTracker',
         './src/core/archiver.js',
-        './src/core/activateDirectory',
+        './src/core/alphabetfs-utils.js',
         './src/express/server.js'
         );
