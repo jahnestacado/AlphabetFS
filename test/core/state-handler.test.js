@@ -2,13 +2,13 @@ var assert = require('assert');
 var sinon = require('sinon');
 var bus = require('hermes-bus');
 
-describe("'#################### Starting integration tests for 'statusBallBlinkHandler' module'", function() {
+describe("'#################### Starting integration tests for 'state-handler' module'", function() {
     var statusBallBlinkHandle;
     var socketEmitUIEventSpy;
     var sandbox;
 
     before(function() {
-        statusBallBlinkHandler = require('./../../src/core/statusBallBlinkHandler.js');
+        statusBallBlinkHandler = require('./../../src/core/state-handler.js');
     });
 
     before(function() {
@@ -120,7 +120,7 @@ describe("'#################### Starting integration tests for 'statusBallBlinkH
     after(function() {
         sandbox.restore();
         bus.hardReset();
-        console.log("  ------------------------------ End of integration tests for 'statusBallBlinkHandler' module\n")
+        console.log("  ------------------------------ End of integration tests for 'state-handler' module\n")
     });
 
 });
