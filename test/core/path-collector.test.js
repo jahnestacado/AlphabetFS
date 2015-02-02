@@ -2,9 +2,9 @@ var assert = require('assert');
 var fs = require('fs');
 var testUtils = require("./../test-utils.js");
 var sinon = require('sinon');
-var pathGatherer = require("./../../src/core/pathGatherer.js");
+var pathCollector = require("./../../src/core/path-collector.js");
 
-describe("#################### Starting integration tests for pathGatherer module\n", function() {
+describe("#################### Starting integration tests for 'path-collector' module\n", function() {
     //Test data
     var testRoot = "tester";
     var fileNames = ["a1.txt", "d2.pdf", "jh.8", "787.ari"];
@@ -45,7 +45,7 @@ describe("#################### Starting integration tests for pathGatherer modul
 
             var contents;
             before(function() {
-                contents = pathGatherer.getDirContent(testRoot);
+                contents = pathCollector.getDirContent(testRoot);
             });
 
             it("should gather all file paths ", function() {
@@ -62,7 +62,7 @@ describe("#################### Starting integration tests for pathGatherer modul
 
             after(function() {
                 sandbox.restore();
-                console.log("  ------------------------------ End of integration tests for pathGatherer module\n")
+                console.log("  ------------------------------ End of integration tests for 'path-collector' module\n")
             });
         });
     });
