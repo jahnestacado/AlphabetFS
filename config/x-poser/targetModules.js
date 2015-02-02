@@ -5,7 +5,7 @@ var targetModules = [
             init: 'init'
         }},
      {
-        path: './src/core/mover.js',
+        path: './src/core/archiver.js',
         exposes: {
             self: 'self'
         }},

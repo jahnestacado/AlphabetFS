@@ -3,21 +3,21 @@ var sinon = require('sinon');
 var X = require('x-poser');
 var bus = require('hermes-bus');
 
-describe("#################### Starting integration tests for 'mover' module", function() {
+describe("#################### Starting integration tests for 'archiver' module", function() {
    
     var sandbox = sinon.sandbox.create();
     var dummyFunction = function() {};
     var moveToLetterDirStub;
-    var mover;
+    var archiver;
     var emitRegisterDirectorySpy;
 
     before(function() {
-        mover = X.require('./src/core/mover.js', 'auto');
+        archiver = X.require('./src/core/archiver.js', 'auto');
         bus.onEvent('core', 'registerDirectory', dummyFunction);
     });
 
     before(function() {
-        moveToLetterDirStub = sandbox.stub(mover.self, 'moveToLetterDir');
+        moveToLetterDirStub = sandbox.stub(archiver.self, 'moveToLetterDir');
         emitRegisterDirectorySpy = sandbox.spy(bus.core, "emitRegisterDirectory");
     });
 
@@ -167,7 +167,7 @@ describe("#################### Starting integration tests for 'mover' module", f
     after(function() {
         sandbox.restore();
         bus.hardReset();
-        console.log("  ------------------------------ End of integration tests for 'mover' module\n")
+        console.log("  ------------------------------ End of integration tests for 'archiver' module\n")
     });
     
 });

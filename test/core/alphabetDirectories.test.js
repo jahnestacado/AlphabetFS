@@ -17,7 +17,7 @@ describe("#################### Starting integration tests for 'alphabetDirectori
     });
 
      before("loading events",function() {
-        bus.subscribeEventsFrom('./src/core/mover.js');
+        bus.subscribeEventsFrom('./src/core/archiver.js');
      });
 
     before("stubbing relevant function", function() {
